@@ -115,7 +115,7 @@ function renderChart1() {
     y: s.y,
     name: s.name,
     type: 'bar',
-    hovertemplate: '%{y:,.2f}<extra></extra>',
+    hovertemplate: `${s.name}: %{y:,.2f}<extra></extra>`,
   }));
   Plotly.newPlot('chart1', traces, {
     barmode: 'stack',
@@ -134,7 +134,7 @@ function renderChart2() {
     name: s.name,
     type: 'bar',
     yaxis: 'y',
-    hovertemplate: '%{y:,.2f}<extra></extra>',
+    hovertemplate: `${s.name}: %{y:,.2f}<extra></extra>`,
   }));
   const lineTraces = DATA.chart2_lines.map(s => ({
     x: DATA.years,
@@ -143,7 +143,7 @@ function renderChart2() {
     type: 'scatter',
     mode: 'lines+markers',
     yaxis: 'y2',
-    hovertemplate: '%{y:,.2f}<extra></extra>',
+    hovertemplate: `${s.name}: %{y:,.2f}<extra></extra>`,
   }));
   Plotly.newPlot('chart2', [...barTraces, ...lineTraces], {
     barmode: 'group',
