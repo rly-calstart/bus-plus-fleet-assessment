@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCO Bus Fleet — Results</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+  :root {
+    --ink: #1f2a24;
+    --muted: #5b6b63;
+    --border: #dde3df;
+    --bg-alt: #f6f8f6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: var(--ink);
+    background: #ffffff;
+  }
+  h1 { font-size: 1.25rem; margin: 0 0 20px 0; }
+  h2 { font-size: 1rem; font-weight: 600; margin: 0 0 8px 0; }
+  .block { margin-bottom: 32px; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
+  .table-wrap.narrow { max-width: 50%; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.82rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 7px 10px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  th { background: var(--bg-alt); }
+  th:first-child, td:first-child { text-align: left; }
+  #chart1, #chart2 { width: 100%; min-height: 400px; }
+</style>
+</head>
+<body>
+
+<h1>TCO Bus Fleet — Results</h1>
+
+<div class="block">
+  <h2>Total real cost of the fleet</h2>
+  <div class="table-wrap" id="table-cost"></div>
+</div>
+
+<div class="block">
+  <h2>Fleet's financial summary</h2>
+  <div class="table-wrap narrow" id="table-summary"></div>
+</div>
+
+<div class="block">
+  <h2>Cashflow</h2>
+  <div class="table-wrap" id="table-cashflow"></div>
+</div>
+
+<div class="block">
+  <h2>Cost Components</h2>
+  <div id="chart1"></div>
+</div>
+
+<div class="block">
+  <h2>Cumulative Cashflow (Clean Fuel vs. Baseline Fuel)</h2>
+  <div id="chart2"></div>
+</div>
+
+<script>
+const DATA = {"fuel_types": ["Diesel", "Gas", "CNG", "Battery", "Low Nox"], "cost_rows": [{"label": "Number of Vehicles", "values": [98, 90, 0, 188, 0]}, {"label": "Vehicle Capital Expense", "values": [21886438, 18466480, 0, 41706000, 0]}, {"label": "Fuel Cost + LCFS", "values": [6603006.71, 6064954.96, 0, 4965026.74, 0]}, {"label": "Maintenance ", "values": [13947853.92, 14554144.8, 0, 8368712.35, 0]}, {"label": "Insurance", "values": [0, 0, 0, 0, 0]}, {"label": "Tax Shield", "values": [0, 0, 0, 0, 0]}, {"label": "Total Real Cost", "values": [0, 0, 0, 0, 0]}], "summary_rows": [{"label": "% Fuel Savings (including LCFS)", "value": 0.61}, {"label": "% Maintenance Savings (including insurance)", "value": 0.71}, {"label": "Purchase Price Baseline", "value": 40352918}, {"label": "Purchase Price Clean", "value": 41706000}, {"label": "Purchase Price Difference", "value": 1353082}, {"label": "Fuel Savings Per Year", "value": 366806.43}, {"label": "Maintenance Savings Per Year", "value": 958727.92}, {"label": "Tax Shield Savings Per Year (only during depreciation schedule)", "value": 0}, {"label": "Lifetime Savings (not including purchase price)", "value": 27836221.3}, {"label": "Total Real Cost Baseline", "value": 0}, {"label": "Total Real Cost Clean", "value": 0}, {"label": "Total Real Savings Including Purchase Price (years)", "value": 0}, {"label": "Simple Payback (years)", "value": 13.84}, {"label": "Payback on Discounted Cash Flows (years)", "value": 13.84}], "cashflow_years": [2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058], "cashflow_rows": [{"label": "Baseline vehicle", "values": [0, 0, 0, 4466620, 7648967.61, 12829756.4, 18379876.14, 24285491.01, 24280017.43, 25912873.69, 25917938.08, 25921635.92, 23244903.76, 18561237.81, 13518230.66, 8110138.66, 2339893.51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {"label": "Clean vehicle", "values": [0, 0, 0, 4477460, 9043397.54, 13706584.11, 18467019.72, 23324704.37, 23324704.37, 23324704.37, 23324704.37, 23324704.37, 22429212.37, 17934640.06, 13349835.92, 8667782.74, 3888480.52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}], "chart1_categories": ["Vehicle Capital Expense", "Fuel Cost + LCFS", "Maintenance "], "chart1_series": [{"name": "Diesel", "y": [21886438, 6603006.71, 13947853.92]}, {"name": "Gas", "y": [18466480, 6064954.96, 14554144.8]}, {"name": "Battery", "y": [41706000, 4965026.74, 8368712.35]}], "chart2_years": [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047, 2048, 2049, 2050, 2051, 2052, 2053, 2054, 2055, 2056, 2057, 2058], "chart2_series": [{"name": "Baseline vehicle", "y": [0, 4466620, 7648967.61, 12829756.4, 18379876.14, 24285491.01, 24280017.43, 25912873.69, 25917938.08, 25921635.92, 23244903.76, 18561237.81, 13518230.66, 8110138.66, 2339893.51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {"name": "ESB - without incentives", "y": [0, 4477460, 9043397.54, 13706584.11, 18467019.72, 23324704.37, 23324704.37, 23324704.37, 23324704.37, 23324704.37, 22429212.37, 17934640.06, 13349835.92, 8667782.74, 3888480.52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}]};
+
+function fmt(v) {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'number') {
+    return v.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  }
+  return v;
+}
+
+function renderCostTable() {
+  const el = document.getElementById('table-cost');
+  let html = '<table><thead><tr><th>Fuel Type</th>';
+  DATA.fuel_types.forEach(f => html += `<th>${f}</th>`);
+  html += '</tr></thead><tbody>';
+  DATA.cost_rows.forEach(row => {
+    html += `<tr><td>${row.label}</td>` + row.values.map(v => `<td>${fmt(v)}</td>`).join('') + '</tr>';
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+function renderSummaryTable() {
+  const el = document.getElementById('table-summary');
+  let html = '<table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>';
+  DATA.summary_rows.forEach(row => {
+    html += `<tr><td>${row.label}</td><td>${fmt(row.value)}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+function renderCashflowTable() {
+  const el = document.getElementById('table-cashflow');
+  let html = '<table><thead><tr><th></th>';
+  DATA.cashflow_years.forEach(y => html += `<th>${y}</th>`);
+  html += '</tr></thead><tbody>';
+  DATA.cashflow_rows.forEach(row => {
+    html += `<tr><td>${row.label}</td>` + row.values.map(v => `<td>${fmt(v)}</td>`).join('') + '</tr>';
+  });
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+
+function renderChart1() {
+  const traces = DATA.chart1_series.map(s => ({
+    x: DATA.chart1_categories,
+    y: s.y,
+    name: s.name,
+    type: 'bar',
+    hovertemplate: `${s.name}: %{y:,.2f}<extra></extra>`,
+  }));
+  Plotly.newPlot('chart1', traces, {
+    barmode: 'group',
+    margin: { t: 10, r: 10, b: 60, l: 70 },
+    legend: { orientation: 'h', y: -0.25 },
+    yaxis: { title: 'Cost ($)' },
+    hovermode: 'x unified',
+  }, { responsive: true, displaylogo: false });
+}
+
+function renderChart2() {
+  const traces = DATA.chart2_series.map(s => ({
+    x: DATA.chart2_years,
+    y: s.y,
+    name: s.name,
+    type: 'scatter',
+    mode: 'lines+markers',
+    hovertemplate: `${s.name}: %{y:,.2f}<extra></extra>`,
+  }));
+  Plotly.newPlot('chart2', traces, {
+    margin: { t: 10, r: 10, b: 40, l: 70 },
+    legend: { orientation: 'h', y: -0.2 },
+    xaxis: { title: 'Year', dtick: 1 },
+    yaxis: { title: 'Cumulative real cash flow ($)' },
+    hovermode: 'x unified',
+  }, { responsive: true, displaylogo: false });
+}
+
+renderCostTable();
+renderSummaryTable();
+renderCashflowTable();
+renderChart1();
+renderChart2();
+</script>
+
+</body>
+</html>

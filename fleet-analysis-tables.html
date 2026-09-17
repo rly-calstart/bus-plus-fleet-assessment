@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleet Analysis — Assumptions & Estimates</title>
+<style>
+  :root {
+    --ink: #1f2a24;
+    --muted: #5b6b63;
+    --border: #dde3df;
+    --bg-alt: #f6f8f6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: var(--ink);
+    background: #ffffff;
+  }
+  h1 { font-size: 1.25rem; margin: 0 0 20px 0; }
+  h2 { font-size: 1rem; font-weight: 600; margin: 0 0 8px 0; }
+  .table-block { margin-bottom: 32px; }
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 0.82rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 7px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--bg-alt);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  th.sort-asc::after { content: " \25B2"; }
+  th.sort-desc::after { content: " \25BC"; }
+  td.category { font-weight: 600; background: var(--bg-alt); white-space: nowrap; }
+  td.notes { white-space: pre-wrap; max-width: 320px; }
+  td.notes a { color: #1f7a6c; }
+  tbody tr:hover td:not(.category) { background: #eef4f0; }
+</style>
+</head>
+<body>
+
+<h1>Fleet Analysis — Assumptions & Estimates</h1>
+
+<div class="table-block">
+  <h2>Fleet Route Analysis</h2>
+  <div class="table-wrap" id="table1"></div>
+</div>
+
+<div class="table-block">
+  <h2>Estimates used for Emissions calculation and TCO</h2>
+  <div class="table-wrap" id="table2"></div>
+</div>
+
+<script>
+const DATA = {"table1": {"category_label": "Fleet Category", "columns": ["Replacement Vehicle Model", "# of Vehicles", "Battery capacity (kWh)", "Vehicle efficiency (kWh/mile)", "Vehicle Type", "Avg. Daily Mileage", "Avg. Annual Mileage", "Avg. Operating days"], "rows": [{"category": "Bus Fleet", "rowspan": 2, "values": ["Thomas Jouley Gen 2", 98, 246, 2.64, "School Bus Type C", 70.18, 12668, 169]}, {"category": null, "rowspan": 0, "values": ["Microbird Ge 5", 90, 175, 2.08, "School Bus Type A", 79.74, null, 169]}, {"category": "Non-Bus Fleet", "rowspan": 1, "values": ["Ford E Transit", 62, 89, 0.56, "Passenger Van", 62.5, 11058, 175]}, {"category": "School Passenger Fleet", "rowspan": 2, "values": ["Kia EV 9", 17, 76.1, 0.38, "Passenger Car", 150, 15900, 106]}, {"category": null, "rowspan": 0, "values": ["Ford E Transit", 14, 89, 0.56, "Passenger Van", 150, null, 106]}]}, "table2": {"category_label": "Category", "columns": ["Model", "Powertrain", "MPG/MPGGe", "Approx. Price", "Tool Used", ""], "rows": [{"category": "School Passenger Van", "rowspan": 2, "values": ["Ford E tranist Van", "EV", 60.2, 65000, "AFLEET", "1. https://www.ford.com/inventory/details/e-transit/vin/1FTBW1XM0TKB05202/05238/66062?intcmp=siResults-cta-siVdp&searchDepth=1%3A2%3Aexact\n2. https://www.fromtheroad.ford.com/us/en/articles/2025/ford-pro-fact-sheet-ford-transit-and-e-transit"]}, {"category": null, "rowspan": 0, "values": ["Ford Transit 350", "Gas", 13, 43000, "AFLEET", "https://www.cars.com/research/ford-transit_350-2015/specs/366433/ "]}, {"category": "School Passenger Car", "rowspan": 2, "values": ["Kia EV 9", "EV", 88.7, 53200, "AFLEET", "https://oakeskiaolathe.com/sale/kia-ev9-olathe-ks "]}, {"category": null, "rowspan": 0, "values": ["Ford Expedition 2015", "Gas", 30.7, 50000, "AFLEET", "https://www.cars.com/research/ford-expedition_el-2015/trims/ "]}, {"category": "Non-Bus", "rowspan": 1, "values": ["Ford Transit 350", "Gas", 11.4, 43000, "AFLEET", "MPG provided by Fleet"]}, {"category": "Bus Fleet", "rowspan": 1, "values": ["Type C & Type A Bus", "Diesel", 22.5, 223331, "1. AFLEET for Emissions calculation\n\n2. Calstart's TCO Tool for ESBs", null]}]}};
+
+function linkify(text) {
+  if (text === null || text === undefined) return '';
+  const str = String(text);
+  const urlRe = /(https?:\/\/[^\s]+)/g;
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(urlRe, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+}
+
+function fmt(v) {
+  if (v === null || v === undefined) return '';
+  return v;
+}
+
+function renderTable(containerId, tableData, notesColIndex) {
+  const container = document.getElementById(containerId);
+  let sortState = { col: null, dir: 1 };
+
+  function draw() {
+    // Build a flat row list carrying the category + values together so we
+    // can sort while still knowing which rows share a rowspan group.
+    let rows = tableData.rows.map((r, i) => ({ ...r, _origIndex: i }));
+
+    if (sortState.col !== null) {
+      // Sorting flattens the grouped category column visually (rowspans are
+      // only meaningful in the original order), so sorting on any column
+      // other than the category column forward-fills the category for
+      // display and drops rowspans for that render.
+      const idx = sortState.col;
+      const getVal = (r) => idx === -1 ? (r.category ?? '') : r.values[idx];
+      // forward-fill category for stable grouping display when sorted
+      let lastCat = null;
+      const filled = tableData.rows.map(r => {
+        if (r.category !== null) lastCat = r.category;
+        return { category: lastCat, rowspan: 1, values: r.values };
+      });
+      rows = filled.sort((a, b) => {
+        const av = getVal(a), bv = getVal(b);
+        if (av === bv) return 0;
+        if (av === null || av === undefined || av === '') return 1;
+        if (bv === null || bv === undefined || bv === '') return -1;
+        return (av > bv ? 1 : -1) * sortState.dir;
+      });
+    }
+
+    let html = '<table><thead><tr>';
+    const catLabel = tableData.category_label;
+    html += `<th data-col="-1" class="${sortState.col === -1 ? (sortState.dir === 1 ? 'sort-asc' : 'sort-desc') : ''}">${catLabel}</th>`;
+    tableData.columns.forEach((c, i) => {
+      const cls = sortState.col === i ? (sortState.dir === 1 ? 'sort-asc' : 'sort-desc') : '';
+      html += `<th data-col="${i}" class="${cls}">${c}</th>`;
+    });
+    html += '</tr></thead><tbody>';
+
+    rows.forEach(r => {
+      html += '<tr>';
+      if (r.rowspan > 0) {
+        html += `<td class="category" rowspan="${r.rowspan}">${fmt(r.category)}</td>`;
+      }
+      r.values.forEach((v, i) => {
+        const isNotes = notesColIndex !== undefined && i === notesColIndex;
+        html += isNotes ? `<td class="notes">${linkify(v)}</td>` : `<td>${fmt(v)}</td>`;
+      });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+
+    container.querySelectorAll('th').forEach(th => {
+      th.addEventListener('click', () => {
+        const col = parseInt(th.dataset.col, 10);
+        if (sortState.col === col) {
+          sortState.dir *= -1;
+        } else {
+          sortState.col = col;
+          sortState.dir = 1;
+        }
+        draw();
+      });
+    });
+  }
+
+  draw();
+}
+
+renderTable('table1', DATA.table1);
+renderTable('table2', DATA.table2, DATA.table2.columns.length - 1);
+</script>
+
+</body>
+</html>
