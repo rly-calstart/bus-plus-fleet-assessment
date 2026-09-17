@@ -77,13 +77,31 @@ function fmt(v) {
   return v;
 }
 
+function fmtDollar(v) {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'number') {
+    return '$' + v.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  }
+  return v;
+}
+
+function fmtPercent(v) {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'number') {
+    return (v * 100).toLocaleString(undefined, { maximumFractionDigits: 2 }) + '%';
+  }
+  return v;
+}
+
 function renderCostTable() {
   const el = document.getElementById('table-cost');
   let html = '<table><thead><tr><th>Fuel Type</th>';
   DATA.fuel_types.forEach(f => html += `<th>${f}</th>`);
   html += '</tr></thead><tbody>';
   DATA.cost_rows.forEach(row => {
-    html += `<tr><td>${row.label}</td>` + row.values.map(v => `<td>${fmt(v)}</td>`).join('') + '</tr>';
+    // "Number of Vehicles" is a count, not a dollar amount.
+    const formatter = row.label === 'Number of Vehicles' ? fmt : fmtDollar;
+    html += `<tr><td>${row.label}</td>` + row.values.map(v => `<td>${formatter(v)}</td>`).join('') + '</tr>';
   });
   html += '</tbody></table>';
   el.innerHTML = html;
@@ -93,7 +111,15 @@ function renderSummaryTable() {
   const el = document.getElementById('table-summary');
   let html = '<table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>';
   DATA.summary_rows.forEach(row => {
-    html += `<tr><td>${row.label}</td><td>${fmt(row.value)}</td></tr>`;
+    let formatted;
+    if (row.label.includes('%')) {
+      formatted = fmtPercent(row.value);
+    } else if (row.label.includes('(years)')) {
+      formatted = fmt(row.value);
+    } else {
+      formatted = fmtDollar(row.value);
+    }
+    html += `<tr><td>${row.label}</td><td>${formatted}</td></tr>`;
   });
   html += '</tbody></table>';
   el.innerHTML = html;
@@ -105,7 +131,7 @@ function renderCashflowTable() {
   DATA.cashflow_years.forEach(y => html += `<th>${y}</th>`);
   html += '</tr></thead><tbody>';
   DATA.cashflow_rows.forEach(row => {
-    html += `<tr><td>${row.label}</td>` + row.values.map(v => `<td>${fmt(v)}</td>`).join('') + '</tr>';
+    html += `<tr><td>${row.label}</td>` + row.values.map(v => `<td>${fmtDollar(v)}</td>`).join('') + '</tr>';
   });
   html += '</tbody></table>';
   el.innerHTML = html;
@@ -117,7 +143,7 @@ function renderChart1() {
     y: s.y,
     name: s.name,
     type: 'bar',
-    hovertemplate: `${s.name}: %{y:,.2f}<extra></extra>`,
+    hovertemplate: `${s.name}: $%{y:,.2f}<extra></extra>`,
   }));
   Plotly.newPlot('chart1', traces, {
     barmode: 'group',
@@ -135,7 +161,7 @@ function renderChart2() {
     name: s.name,
     type: 'scatter',
     mode: 'lines+markers',
-    hovertemplate: `${s.name}: %{y:,.2f}<extra></extra>`,
+    hovertemplate: `${s.name}: $%{y:,.2f}<extra></extra>`,
   }));
   Plotly.newPlot('chart2', traces, {
     margin: { t: 10, r: 10, b: 40, l: 70 },

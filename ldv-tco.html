@@ -56,7 +56,7 @@ const DATA = {"powertrains": ["Gasoline", "EV", "Gasoline", "EV", "Gasoline", "E
 function fmt(v) {
   if (v === null || v === undefined) return '';
   if (typeof v === 'number') {
-    return v.toLocaleString(undefined, { maximumFractionDigits: 2 });
+    return '$' + v.toLocaleString(undefined, { maximumFractionDigits: 2 });
   }
   return v;
 }
@@ -94,7 +94,7 @@ function renderChart() {
     y: s.y,
     name: s.name,
     type: 'bar',
-    hovertemplate: `${s.name}: %{y:,.2f}<extra></extra>`,
+    hovertemplate: `${s.name}: $%{y:,.2f}<extra></extra>`,
   }));
   Plotly.newPlot('chart', traces, {
     barmode: 'group',
