@@ -22,97 +22,26 @@
   }
   h1 { font-size: 1.25rem; margin: 0 0 20px 0; }
   h2 { font-size: 1rem; font-weight: 600; margin: 0 0 8px 0; }
-  .layout {
-    display: flex;
-    gap: 24px;
-    align-items: flex-start;
-  }
-  .summary-col { flex: 0 0 25vw; min-width: 220px; }
-  .charts-col { flex: 1 1 500px; min-width: 0; }
   .block { margin-bottom: 32px; }
-  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
-  table { border-collapse: collapse; width: 100%; font-size: 0.82rem; }
-  th, td {
-    border: 1px solid var(--border);
-    padding: 7px 10px;
-    text-align: right;
-    white-space: nowrap;
-  }
-  th { background: var(--bg-alt); }
-  th:first-child, td:first-child { text-align: left; }
-  #table-summary th:last-child, #table-summary td:last-child { min-width: 90px; }
-  #chart1, #chart2 { width: 100%; min-height: 380px; }
+  #chart1, #chart2 { width: 100%; min-height: 400px; }
 </style>
 </head>
 <body>
 
 <h1>TCO Bus Fleet — Results</h1>
 
-<div class="layout">
-  <div class="summary-col">
-    <div class="block">
-      <h2>Fleet's financial summary</h2>
-      <div class="table-wrap" id="table-summary"></div>
-    </div>
-  </div>
+<div class="block">
+  <h2>Cost Components</h2>
+  <div id="chart1"></div>
+</div>
 
-  <div class="charts-col">
-    <div class="block">
-      <h2>Cost Components</h2>
-      <div id="chart1"></div>
-    </div>
-
-    <div class="block">
-      <h2>Cumulative Cashflow (Clean Fuel vs. Baseline Fuel)</h2>
-      <div id="chart2"></div>
-    </div>
-  </div>
+<div class="block">
+  <h2>Cumulative Cashflow (Clean Fuel vs. Baseline Fuel)</h2>
+  <div id="chart2"></div>
 </div>
 
 <script>
-const DATA = {"summary_rows": [{"label": "% Fuel Savings (including LCFS)", "value": 0.61}, {"label": "% Maintenance Savings (including insurance)", "value": 0.71}, {"label": "Purchase Price Baseline", "value": 40352918}, {"label": "Purchase Price Clean", "value": 41706000}, {"label": "Purchase Price Difference", "value": 1353082}, {"label": "Fuel Savings Per Year", "value": 366806.43}, {"label": "Maintenance Savings Per Year", "value": 958727.92}, {"label": "Tax Shield Savings Per Year (only during depreciation schedule)", "value": 0}, {"label": "Lifetime Savings (not including purchase price)", "value": 27836221.3}, {"label": "Total Real Cost Baseline", "value": 0}, {"label": "Total Real Cost Clean", "value": 0}, {"label": "Total Real Savings Including Purchase Price (years)", "value": 0}, {"label": "Simple Payback (years)", "value": 13.84}, {"label": "Payback on Discounted Cash Flows (years)", "value": 13.84}], "chart1_categories": ["Vehicle Capital Expense", "Fuel Cost + LCFS", "Maintenance "], "chart1_series": [{"name": "Diesel", "y": [21886438, 6603006.71, 13947853.92]}, {"name": "Gas", "y": [18466480, 6064954.96, 14554144.8]}, {"name": "Battery", "y": [41706000, 4965026.74, 8368712.35]}], "chart2_years": [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040], "chart2_series": [{"name": "Baseline vehicle", "y": [0, 4466620, 7648967.61, 12829756.4, 18379876.14, 24285491.01, 24280017.43, 25912873.69, 25917938.08, 25921635.92, 23244903.76, 18561237.81, 13518230.66, 8110138.66, 2339893.51]}, {"name": "ESB - without incentives", "y": [0, 4477460, 9043397.54, 13706584.11, 18467019.72, 23324704.37, 23324704.37, 23324704.37, 23324704.37, 23324704.37, 22429212.37, 17934640.06, 13349835.92, 8667782.74, 3888480.52]}]};
-
-function fmt(v) {
-  if (v === null || v === undefined) return '';
-  if (typeof v === 'number') {
-    return v.toLocaleString(undefined, { maximumFractionDigits: 2 });
-  }
-  return v;
-}
-
-function fmtDollar(v) {
-  if (v === null || v === undefined) return '';
-  if (typeof v === 'number') {
-    return '$' + v.toLocaleString(undefined, { maximumFractionDigits: 2 });
-  }
-  return v;
-}
-
-function fmtPercent(v) {
-  if (v === null || v === undefined) return '';
-  if (typeof v === 'number') {
-    return (v * 100).toLocaleString(undefined, { maximumFractionDigits: 2 }) + '%';
-  }
-  return v;
-}
-
-function renderSummaryTable() {
-  const el = document.getElementById('table-summary');
-  let html = '<table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>';
-  DATA.summary_rows.forEach(row => {
-    let formatted;
-    if (row.label.includes('%')) {
-      formatted = fmtPercent(row.value);
-    } else if (row.label.includes('(years)')) {
-      formatted = fmt(row.value);
-    } else {
-      formatted = fmtDollar(row.value);
-    }
-    html += `<tr><td>${row.label}</td><td>${formatted}</td></tr>`;
-  });
-  html += '</tbody></table>';
-  el.innerHTML = html;
-}
+const DATA = {"chart1_categories": ["Vehicle Capital Expense", "Fuel Cost + LCFS", "Maintenance "], "chart1_series": [{"name": "Diesel", "y": [21886438, 6603006.71, 13947853.92]}, {"name": "Gas", "y": [18466480, 6064954.96, 14554144.8]}, {"name": "Battery", "y": [41706000, 4965026.74, 8368712.35]}], "chart2_years": [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040], "chart2_series": [{"name": "Baseline vehicle", "y": [0, 4466620, 7648967.61, 12829756.4, 18379876.14, 24285491.01, 24280017.43, 25912873.69, 25917938.08, 25921635.92, 23244903.76, 18561237.81, 13518230.66, 8110138.66, 2339893.51]}, {"name": "ESB - without incentives", "y": [0, 4477460, 9043397.54, 13706584.11, 18467019.72, 23324704.37, 23324704.37, 23324704.37, 23324704.37, 23324704.37, 22429212.37, 17934640.06, 13349835.92, 8667782.74, 3888480.52]}]};
 
 function renderChart1() {
   const traces = DATA.chart1_series.map(s => ({
@@ -149,7 +78,6 @@ function renderChart2() {
   }, { responsive: true, displaylogo: false });
 }
 
-renderSummaryTable();
 renderChart1();
 renderChart2();
 </script>
