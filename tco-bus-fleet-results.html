@@ -27,21 +27,98 @@
   }
   h1 { font-size: 1.25rem; margin: 0 0 20px 0; }
   h2 { font-size: 1rem; font-weight: 600; margin: 0 0 8px 0; }
-  .block { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
-  #chart1 { width: 100%; flex: 1 1 auto; min-height: 500px; }
+  .chart-block { flex: 0 0 50%; display: flex; flex-direction: column; min-height: 0; }
+  #chart1 { width: 100%; flex: 1 1 auto; min-height: 0; }
+  .table-block { flex: 0 0 auto; margin-top: 24px; }
+  .table-row { display: flex; gap: 24px; align-items: flex-start; }
+  .table-col { flex: 1 1 0; min-width: 0; }
+  .table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.82rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 7px 10px;
+    text-align: right;
+    white-space: nowrap;
+  }
+  th { background: var(--bg-alt); }
+  th:first-child, td:first-child { text-align: left; }
 </style>
 </head>
 <body>
 
 <h1>TCO Bus Fleet — Results</h1>
 
-<div class="block">
+<div class="chart-block">
   <h2>Cost Components</h2>
   <div id="chart1"></div>
 </div>
 
+<div class="table-block">
+  <h2>Fleet's financial summary</h2>
+  <div class="table-row">
+    <div class="table-col">
+      <div class="table-wrap" id="table-summary-1"></div>
+    </div>
+    <div class="table-col">
+      <div class="table-wrap" id="table-summary-2"></div>
+    </div>
+  </div>
+</div>
+
 <script>
-const DATA = {"chart_categories": ["Diesel", "Gas", "Battery"], "chart_series": [{"name": "Vehicle Capital Expense", "y": [21886438, 18466480, 41706000]}, {"name": "Fuel Cost", "y": [6603006.71, 6064954.96, 4965026.74]}, {"name": "Maintenance ", "y": [13947853.92, 14554144.8, 8368712.35]}]};
+const DATA = {"chart_categories": ["Diesel", "Gas", "Battery"], "chart_series": [{"name": "Vehicle Capital Expense", "y": [21886438, 18466480, 41706000]}, {"name": "Fuel Cost", "y": [6603006.71, 6064954.96, 4965026.74]}, {"name": "Maintenance ", "y": [13947853.92, 14554144.8, 8368712.35]}], "summary_rows": [{"label": "% Fuel Savings", "value": 0.61}, {"label": "% Maintenance Savings (including insurance)", "value": 0.71}, {"label": "Purchase Price Baseline", "value": 40352918}, {"label": "Purchase Price Clean", "value": 41706000}, {"label": "Purchase Price Difference", "value": 1353082}, {"label": "Fuel Savings Per Year", "value": 366806.43}, {"label": "Maintenance Savings Per Year", "value": 958727.92}, {"label": "Tax Shield Savings Per Year (only during depreciation schedule)", "value": 0}, {"label": "Lifetime Savings (not including purchase price)", "value": 27836221.3}, {"label": "Total Real Cost Baseline", "value": 81522878.39}, {"label": "Total Real Cost Clean", "value": 55039739.09}, {"label": "Total Real Savings Including Purchase Price (years)", "value": 26483139.3}, {"label": "Simple Payback (years)", "value": 13.84}, {"label": "Payback on Discounted Cash Flows (years)", "value": 13.84}]};
+
+function fmt(v) {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'number') {
+    return v.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  }
+  return v;
+}
+
+function fmtDollar(v) {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'number') {
+    return '$' + v.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  }
+  return v;
+}
+
+function fmtPercent(v) {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'number') {
+    return (v * 100).toLocaleString(undefined, { maximumFractionDigits: 2 }) + '%';
+  }
+  return v;
+}
+
+function renderSummaryTable() {
+  const splitLabel = 'Lifetime Savings (not including purchase price)';
+  const splitIdx = DATA.summary_rows.findIndex(r => r.label === splitLabel);
+  const firstHalf = splitIdx === -1 ? DATA.summary_rows : DATA.summary_rows.slice(0, splitIdx);
+  const secondHalf = splitIdx === -1 ? [] : DATA.summary_rows.slice(splitIdx);
+
+  function renderVertical(containerId, rows) {
+    const el = document.getElementById(containerId);
+    let html = '<table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody>';
+    rows.forEach(row => {
+      let formatted;
+      if (row.label.includes('%')) {
+        formatted = fmtPercent(row.value);
+      } else if (row.label.includes('(years)')) {
+        formatted = fmt(row.value);
+      } else {
+        formatted = fmtDollar(row.value);
+      }
+      html += `<tr><td>${row.label}</td><td>${formatted}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  }
+
+  renderVertical('table-summary-1', firstHalf);
+  renderVertical('table-summary-2', secondHalf);
+}
 
 function renderChart1() {
   const totals = DATA.chart_categories.map((_, i) =>
@@ -79,6 +156,7 @@ function renderChart1() {
   }, { responsive: true, displaylogo: false });
 }
 
+renderSummaryTable();
 renderChart1();
 </script>
 
