@@ -41,22 +41,42 @@
 </div>
 
 <script>
-const DATA = {"chart_categories": ["Depreciation", "Fuel", "Maintenance", "Insurance", "License", "TCO"], "chart_series": [{"name": "Gasoline", "y": [2979574.22, 2434026.56, 2809840.82, 1971766.29, 98770.87, 10293978.76]}, {"name": "EV", "y": [3925938.57, 776851.01, 2128844.88, 2403578.93, 186190.8, 9421404.19]}]};
+const DATA = {"powertrains": ["Gasoline", "EV"], "chart_series": [{"name": "Depreciation", "y": [2979574.22, 3925938.57]}, {"name": "Fuel", "y": [2434026.56, 776851.01]}, {"name": "Maintenance", "y": [2809840.82, 2128844.88]}, {"name": "Insurance", "y": [1971766.29, 2403578.93]}, {"name": "License", "y": [98770.87, 186190.8]}]};
 
 function renderChart() {
+  const totals = DATA.powertrains.map((_, i) =>
+    DATA.chart_series.reduce((sum, s) => sum + s.y[i], 0)
+  );
+
   const traces = DATA.chart_series.map(s => ({
-    x: DATA.chart_categories,
-    y: s.y,
+    y: DATA.powertrains,
+    x: s.y,
     name: s.name,
     type: 'bar',
-    hovertemplate: `${s.name}: $%{y:,.2f}<extra></extra>`,
+    orientation: 'h',
+    text: s.y.map(v => s.name + ': $' + v.toLocaleString(undefined, { maximumFractionDigits: 0 })),
+    textposition: 'inside',
+    insidetextanchor: 'middle',
+    hovertemplate: `${s.name}: $%{x:,.2f}<extra></extra>`,
   }));
+
+  const annotations = DATA.powertrains.map((p, i) => ({
+    x: totals[i],
+    y: p,
+    text: 'Total TCO: $' + totals[i].toLocaleString(undefined, { maximumFractionDigits: 0 }),
+    showarrow: false,
+    xanchor: 'left',
+    xshift: 8,
+    font: { size: 12, color: '#1f2a24' },
+  }));
+
   Plotly.newPlot('chart', traces, {
-    barmode: 'group',
-    margin: { t: 10, r: 10, b: 60, l: 80 },
+    annotations: annotations,
+    barmode: 'stack',
+    margin: { t: 10, r: 110, b: 60, l: 90 },
     legend: { orientation: 'h', y: -0.2 },
-    yaxis: { title: 'Cost ($)' },
-    hovermode: 'x unified',
+    xaxis: { title: 'Cost ($)' },
+    hovermode: 'y unified',
   }, { responsive: true, displaylogo: false });
 }
 

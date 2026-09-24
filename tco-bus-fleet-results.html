@@ -13,17 +13,22 @@
     --bg-alt: #f6f8f6;
   }
   * { box-sizing: border-box; }
+  html, body {
+    height: 100%;
+  }
   body {
     font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 20px;
     color: var(--ink);
     background: #ffffff;
+    display: flex;
+    flex-direction: column;
   }
   h1 { font-size: 1.25rem; margin: 0 0 20px 0; }
   h2 { font-size: 1rem; font-weight: 600; margin: 0 0 8px 0; }
-  .block { margin-bottom: 32px; }
-  #chart1, #chart2 { width: 100%; min-height: 400px; }
+  .block { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+  #chart1 { width: 100%; flex: 1 1 auto; min-height: 500px; }
 </style>
 </head>
 <body>
@@ -35,51 +40,46 @@
   <div id="chart1"></div>
 </div>
 
-<div class="block">
-  <h2>Cumulative Cashflow (Clean Fuel vs. Baseline Fuel)</h2>
-  <div id="chart2"></div>
-</div>
-
 <script>
-const DATA = {"chart1_categories": ["Vehicle Capital Expense", "Fuel Cost", "Maintenance "], "chart1_series": [{"name": "Diesel", "y": [21886438, 6603006.71, 13947853.92]}, {"name": "Gas", "y": [18466480, 6064954.96, 14554144.8]}, {"name": "Battery", "y": [41706000, 4965026.74, 8368712.35]}], "chart2_years": [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035, 2036, 2037, 2038, 2039, 2040], "chart2_series": [{"name": "Baseline vehicle", "y": [0, 4466620, 7648967.61, 12829756.4, 18379876.14, 24285491.01, 24280017.43, 25912873.69, 25917938.08, 25921635.92, 23244903.76, 18561237.81, 13518230.66, 8110138.66, 2339893.51]}, {"name": "ESB - without incentives", "y": [0, 4477460, 9043397.54, 13706584.11, 18467019.72, 23324704.37, 23324704.37, 23324704.37, 23324704.37, 23324704.37, 22429212.37, 17934640.06, 13349835.92, 8667782.74, 3888480.52]}]};
+const DATA = {"chart_categories": ["Diesel", "Gas", "Battery"], "chart_series": [{"name": "Vehicle Capital Expense", "y": [21886438, 18466480, 41706000]}, {"name": "Fuel Cost", "y": [6603006.71, 6064954.96, 4965026.74]}, {"name": "Maintenance ", "y": [13947853.92, 14554144.8, 8368712.35]}]};
 
 function renderChart1() {
-  const traces = DATA.chart1_series.map(s => ({
-    x: DATA.chart1_categories,
+  const totals = DATA.chart_categories.map((_, i) =>
+    DATA.chart_series.reduce((sum, s) => sum + s.y[i], 0)
+  );
+
+  const traces = DATA.chart_series.map(s => ({
+    x: DATA.chart_categories,
     y: s.y,
     name: s.name,
     type: 'bar',
+    text: s.y.map(v => s.name + ': $' + v.toLocaleString(undefined, { maximumFractionDigits: 0 })),
+    textposition: 'inside',
+    insidetextanchor: 'middle',
     hovertemplate: `${s.name}: $%{y:,.2f}<extra></extra>`,
   }));
+
+  const annotations = DATA.chart_categories.map((c, i) => ({
+    x: c,
+    y: totals[i],
+    text: 'Total: $' + totals[i].toLocaleString(undefined, { maximumFractionDigits: 0 }),
+    showarrow: false,
+    yanchor: 'bottom',
+    yshift: 4,
+    font: { size: 12, color: '#1f2a24' },
+  }));
+
   Plotly.newPlot('chart1', traces, {
-    barmode: 'group',
-    margin: { t: 10, r: 10, b: 60, l: 70 },
+    annotations: annotations,
+    barmode: 'stack',
+    margin: { t: 40, r: 10, b: 60, l: 70 },
     legend: { orientation: 'h', y: -0.25 },
     yaxis: { title: 'Cost ($)' },
     hovermode: 'x unified',
   }, { responsive: true, displaylogo: false });
 }
 
-function renderChart2() {
-  const traces = DATA.chart2_series.map(s => ({
-    x: DATA.chart2_years,
-    y: s.y,
-    name: s.name,
-    type: 'scatter',
-    mode: 'lines+markers',
-    hovertemplate: `${s.name}: $%{y:,.2f}<extra></extra>`,
-  }));
-  Plotly.newPlot('chart2', traces, {
-    margin: { t: 10, r: 10, b: 40, l: 70 },
-    legend: { orientation: 'h', y: -0.2 },
-    xaxis: { title: 'Year', dtick: 1 },
-    yaxis: { title: 'Cumulative real cash flow ($)' },
-    hovermode: 'x unified',
-  }, { responsive: true, displaylogo: false });
-}
-
 renderChart1();
-renderChart2();
 </script>
 
 </body>
