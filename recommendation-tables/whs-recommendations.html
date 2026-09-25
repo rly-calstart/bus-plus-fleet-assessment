@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHS Clean Mobility Blueprint — Recommendations</title>
+<style>
+  :root {
+    --ink: #1f2a24;
+    --muted: #5b6b63;
+    --border: #dde3df;
+    --accent: #2f6f4f;
+    --bg-alt: #f6f8f6;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: var(--ink);
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+  }
+  h1 { font-size: 1.25rem; margin: 0 0 16px 0; }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .tab-btn {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .tab-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+  .table-panel {
+    display: none;
+    flex: 1 1 auto;
+    min-height: 0;
+    flex-direction: column;
+  }
+  .table-panel.active { display: flex; }
+  .table-wrap {
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    flex: 1 1 auto;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--bg-alt);
+    position: sticky;
+    top: 0;
+  }
+  td:nth-child(5), th:nth-child(5) { padding-right: calc(12px + 3ch); }
+  td:nth-child(6) { min-width: 320px; }
+  tbody tr:nth-child(even) { background: #fbfcfb; }
+  tbody tr:hover { background: #eef4f0; }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .filters label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filters select {
+    font-size: 0.85rem;
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<h1>WHS Clean Mobility Blueprint — Recommendations</h1>
+
+<div class="tabs" id="tabs"></div>
+<div id="panels"></div>
+
+<script>
+const DATA = {"tables": [{"headers": ["Action", "Timeframe", "Lead", "Other Stakeholders", "Cost", "Description and Rationale"], "rows": [["School Mobility Team and Clean Mobility Goals", "Near-term; Ongoing", "WHS Administration / Bethel School District", "BSD Transportation; BSD Facilities; SRTS Coordinator; students; staff; families; City of Eugene; LTD", "$", "Establish a multidisciplinary team responsible for implementing the Blueprint and adopt a small set of measurable district/school clean-mobility goals. Build on existing SRTS participation rather than creating a separate structure. This could also including recruiting students or clubs to promote commute options and advise the mobility team."], ["Commute Data and Mode-Share Tracking", "Near-term; Annual", "WHS Mobility Team", "BSD Transportation; students; staff; LTD", "$-$$", "Establish the current survey as the baseline and conduct annual counts/surveys of student and staff modes, parking occupancy, bike/scooter activity, bus ridership, transit use, and vehicle queues. Reconcile differences between datasets - for example, the Needs Assessment estimates regular yellow-bus use at 5-10%, while the commute survey reports 22.7%. Staff should receive additional outreach because they were underrepresented in the survey."], ["School Bus Service and Driver Resilience Plan", "Near-term", "BSD Transportation", "First Student; WHS; drivers; students and families", "$", "Evaluate service reliability, driver recruitment/retention, eligibility, registration, routing, capacity, and communication. The Needs Assessment reports driver shortages but no vehicle shortages, suggesting personnel capacity may be a greater near-term operational issue than fleet size. BSD contracts with First Student for general-education service while directly serving specialized transportation, so responsibilities should be explicitly addressed."], ["Bus Ridership and Eligibility Analysis", "Near-term", "BSD Transportation", "WHS; First Student; families", "$", "Compare the estimated 20-30% of students eligible for fixed-route school bus service with actual participation and survey interest. Identify whether registration, schedules, trip times, awareness, or other factors suppress ridership. Bethel generally provides high-school transportation to students living at least 1.5 miles from school."], ["Transit and After-School Mobility Plan", "Near-term", "WHS / BSD Transportation", "LTD; athletics; clubs; counselors; students", "$", "Evaluate how existing transit can serve school-day and after-school trips, including stop amenities, schedules, route awareness, and connections to activities/jobs. The Needs Assessment reports a relatively low Transit Score of 32, but LTD Route 40 directly serves Willamette and Lane County K-12 students can receive a free LTD pass."], ["Echo Hollow SRTS Implementation Coordination", "Near-term; Ongoing", "City of Eugene / BSD", "WHS; Eugene-Springfield SRTS; ODOT; neighborhood", "$", "Treat the existing Echo Hollow Safe Routes to School Plan as the principal corridor infrastructure plan and use the Blueprint to advance implementation and funding. WHS students already participated in corridor planning, and the plan contains specific recommendations addressing parking circulation, crossings, bicycle facilities, and pedestrian access."], ["Fleet Electrification and Charging Readiness Plan", "Near-term", "BSD Transportation / Facilities", "First Student; EWEB; WHS", "$-$$", "Develop a district-level fleet transition plan that clarifies vehicle ownership, replacement schedules, duty cycles, charging locations, electrical capacity, and responsibilities between Bethel and First Student"], ["Mobility Funding Strategy", "Near-term; Ongoing", "BSD", "WHS; City of Eugene; ODOT; LTD; EWEB", "$", "Maintain a funding pipeline for SRTS construction, active transportation, fleet conversion, transit amenities, and pilot programs."]], "title": "Planning and Capacity Building"}, {"headers": ["Action", "Timeframe", "Lead", "Other Stakeholders", "Cost", "Recommended Action and Rationale"], "rows": [["Free LTD Student Pass and Transit Orientation", "Near-term; Ongoing", "WHS / LTD", "BSD; students; families", "$", "Conduct recurring outreach on obtaining and using the free LTD K-12 pass, trip planning, route schedules, and safe stop access. Approximately 20 students were observed waiting at the southbound stop during dismissal, and survey interest in transit exceeded current use."], ["School Bus Participation Initiative", "Near-term", "BSD", "WHS; First Student; families", "$", "Increase awareness of annual registration, eligibility, routes, real-time tracking, and service availability while implementing findings from the bus-service analysis. Survey respondents showed greater ideal interest in school bus use than current use, suggesting potential for mode shift if service and information barriers can be addressed."], ["After-School Transportation Pilot", "Medium-term", "WHS / BSD", "LTD; athletics; clubs; youth programs", "$-$$", "Use the transit/after-school assessment to address trips not well served by regular yellow-bus schedules. Begin with existing LTD service and free student passes, then test targeted supplemental transportation only where a documented gap remains. Time and schedule constraints were significant survey barriers."], ["Mobility Information Campaign", "Near-term", "WHS Mobility Team", "BSD Communications; LTD; SRTS", "$", "Develop a simple 'Ways to Get to WHS' resource covering school buses, LTD, recommended walking/biking connections, bike/scooter parking, carpooling, and arrival/dismissal procedures. Emphasize convenience, safety, reliability, and cost because survey findings indicate these are stronger motivators than environmental benefits alone."], ["Carpool and Preferred Parking Program", "Near-term", "WHS Administration", "Students; staff; BSD Facilities", "$", "Pilot preferred parking or other incentives for verified carpools. Carpooling represents a small share of current trips, while the 326-space parking supply is reported near capacity and field observations similarly found very high parking utilization."], ["Anti-Idling Program", "Near-term", "WHS Administration", "Families; students; Bethel Transportation", "$", "Expand no-idling signs and education to the south lot/loading zone, where most pickup activity occurs. Field observations found a majority of pickup vehicles idling but no bus idling, indicating passenger vehicles are the principal target for this action."], ["Walk, Bike and Micromobility Program", "Near-term; Ongoing", "Bethel SRTS / WHS", "City of Eugene; students; Shift Community Cycles", "$", "Expand bicycle/pedestrian safety education, route awareness, walk-and-roll events, and micromobility training. The Needs Assessment estimates 20-30% of students already use active transportation, typical student trips are 1.1-3 miles, and public-data inputs give the area a Bike Score of 84. Survey results also indicate substantial interest in walking, bikes, e-bikes, and scooters."], ["Bike Lab / Repair Program", "Near-term", "WHS / Bethel SRTS", "Shift Community Cycles; students; community partners", "$-$$", "Reestablish or expand the previous WHS bicycle-repair effort rather than creating a completely new program. Confirm the current status, then support student repair skills, maintenance access, locks, helmets, lights, and rain gear."], ["PeaceHealth Rides Bikeshare Partnership / WHS Hub Pilot", "Medium-term", "WHS / BSD", "Cascadia Mobility; PeaceHealth Rides; City of Eugene; LTD; students; staff; community partners", "$\u2013$$", "Explore opportunities to establish a PeaceHealth Rides bikeshare hub or service area at or near Willamette High School. A school-based bikeshare connection could expand access to bicycles and e-bikes for eligible students, staff, and potentially nearby community members, while improving first-/last-mile connections to LTD and surrounding neighborhoods. The feasibility assessment should evaluate current service boundaries, potential hub locations, expected demand, age and membership eligibility, helmet and safety education, secure parking, funding, and ongoing operations."], ["E-Bike Lending Library Pilot", "Medium-term", "WHS / BSD", "EWEB; Shift Community Cycles; community partners", "$$", "Pilot a small lending fleet focused on students or staff for whom distance makes walking difficult but whose commute remains suitable for an e-bike. The 1.1-3 mile typical student commute and high Bike Score suggest favorable conditions."], ["School-Based EV Carshare Pilot", "Medium-term", "WHS / BSD", "Carshare operator; EWEB; staff; community partners; local residents", "$$-$$$", "Host one or more shared electric vehicles at Willamette High School that eligible staff - and potentially community members - could reserve by the hour or day. The vehicles could provide an alternative to owning or bringing a personal vehicle to campus, particularly for users who could otherwise commute by transit, walking, biking, or carpooling but occasionally need a car. The pilot would also introduce users to EVs without requiring vehicle ownership. Evaluate vehicle demand, user eligibility, insurance/liability, reservation technology, pricing, operating responsibilities, dedicated parking, and charging"], ["Active-Commuter Storage and Gear Program", "Near-term", "WHS", "BSD Facilities; students", "$", "Provide secure lockers/storage for helmets, rain gear, backpacks, athletic equipment, and other items. Carrying equipment was identified as a survey barrier, while weather was another frequently cited challenge."]], "title": "Programmatic Actions"}, {"headers": ["Action", "Timeframe", "Lead", "Other Stakeholders", "Cost", "Recommended Action and Rationale"], "rows": [["Parking Lot Pedestrian Spine", "Medium-term", "BSD Facilities", "WHS; students; accessibility/safety staff", "$$-$$$", "Extend the two existing striped pedestrian routes so designated or protected walking space continues through a larger portion of the parking lot. Students currently walk substantial distances outside the striped segments and mix with parked and moving vehicles. The Needs Assessment's 5/5 congestion rating reinforces the priority of separating pedestrians from vehicle circulation"], ["North Lot Bus/Passenger Separation", "Near- to Medium-term", "BSD Facilities / WHS", "BSD Transportation; First Student", "$-$$", "Strengthen the bus-only area through signs, pavement markings, delineators, or physical separation. Morning observations found passenger vehicles using the bus area and congestion where buses and private vehicles mixed."], ["South Lot Loading-Zone Improvements", "Medium-term", "BSD / City of Eugene", "WHS; traffic engineer", "$$-$$$", "Complete the traffic analysis recommended by the existing SRTS plan and implement appropriate access-management improvements. The public plan documents substantial dismissal backup and recommends studying left-turn volumes and parking-lot circulation, including potential right-in/right-out restrictions or 'Keep Clear' treatments."], ["Echo Hollow Walking and Biking Improvements", "Medium- to Long-term", "City of Eugene", "BSD; WHS; ODOT; SRTS", "$$$", "Continue implementation and funding efforts for the bicycle, pedestrian, and crossing improvements already developed through the Echo Hollow SRTS process. The plan identifies narrow existing bicycle/pedestrian facilities, limited east-west crossings, neighborhood student parking, and heavy pedestrian activity around WHS."], ["Southbound LTD Stop Shelter and Amenities", "Near- to Medium-term", "LTD", "City of Eugene; Bethel; WHS", "$-$$", "Add weather protection at the southbound stop and evaluate lighting, accessibility, seating, wayfinding, and pedestrian access. This also addresses weather as a survey barrier."], ["Covered Bike and Scooter Parking", "Near- to Medium-term", "Bethel Facilities / WHS", "Bethel SRTS; students; Shift Community Cycles", "$\u2013$$", "Evaluate constructing a covered bicycle and scooter shelter at a convenient, visible location near a primary school entrance to make active transportation more practical and attractive year-round. The Needs Assessment indicates that existing bike/scooter parking is not currently at capacity, so the emphasis should be on improving the quality, weather protection, security, lighting, and location of parking rather than simply adding uncovered rack capacity. A covered facility could help address weather as a barrier identified in the commute survey and support increased use of bicycles, e-bikes, and scooters"], ["White-Fleet Electrification", "Medium-term; Phased", "BSD Transportation", "BSD Facilities; EWEB", "$$-$$$", "Develop a replacement strategy for the district's seven white-fleet vehicles, of which only one is currently electric. Prioritize vehicles with predictable daily mileage and sufficient dwell time for Level 2 charging. Replace vehicles at normal retirement points where feasible."], ["Fleet Charging Infrastructure", "Medium- to Long-term", "BSD Facilities / Transportation", "First Student; EWEB", "$$-$$$", "Install charging only after completing fleet-duty-cycle and ownership planning. The Needs Assessment reports zero fleet charging ports, despite one electric white-fleet vehicle. Evaluate whether charging should be located at WHS, a district transportation facility, or another centralized location; avoid assuming the school campus is the optimal depot."], ["Personal EV Charging ", "Medium- to Long-term", "BSD Facilities", "EWEB; WHS staff", "$$", "Following electrical-capacity planning, consider a small Level 2 installation for staff or shared district use. No personal-vehicle charging currently exists, but this should remain a lower priority than circulation, pedestrian safety, buses, transit, and active transportation because survey interest in EV charging was comparatively low."], ["E-Bike/Scooter Charging", "Near- to Medium-term", "BSD Facilities / WHS", "EWEB; students", "$-$$", "If e-bike use grows, consider controlled charging integrated with secure bicycle/scooter parking rather than stand-alone outdoor outlets. If other e-micromobility programs are conducted, than increase the priority of this action."]], "title": "Infrastructure Actions"}]};
+
+function slug(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function uniqueSorted(values) {
+  return Array.from(new Set(values.filter(v => v !== null && v !== undefined && v !== '')))
+    .sort((a, b) => String(a).localeCompare(String(b)));
+}
+
+function renderTabsAndTables() {
+  const tabsEl = document.getElementById('tabs');
+  const panelsEl = document.getElementById('panels');
+
+  DATA.tables.forEach((table, i) => {
+    const id = slug(table.title);
+
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = table.title;
+    btn.dataset.target = id;
+    btn.addEventListener('click', () => showPanel(id));
+    tabsEl.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'table-panel' + (i === 0 ? ' active' : '');
+    panel.id = id;
+
+    const timeframes = uniqueSorted(table.rows.map(r => r[1]));
+    const costs = uniqueSorted(table.rows.map(r => r[4]));
+
+    let html = '<div class="filters">';
+    html += `<label>Timeframe: <select id="${id}-timeframe-filter"><option value="">All</option>` +
+      timeframes.map(t => `<option value="${t}">${t}</option>`).join('') + '</select></label>';
+    html += `<label>Cost: <select id="${id}-cost-filter"><option value="">All</option>` +
+      costs.map(c => `<option value="${c}">${c}</option>`).join('') + '</select></label>';
+    html += '</div>';
+
+    html += '<div class="table-wrap"><table><thead><tr>';
+    table.headers.forEach(h => html += `<th>${h}</th>`);
+    html += '</tr></thead><tbody>';
+    table.rows.forEach(row => {
+      const timeframe = row[1] ?? '';
+      const cost = row[4] ?? '';
+      html += `<tr data-timeframe="${timeframe}" data-cost="${cost}">` +
+        row.map(v => `<td>${v === null || v === undefined ? '' : v}</td>`).join('') + '</tr>';
+    });
+    html += '</tbody></table></div>';
+    panel.innerHTML = html;
+    panelsEl.appendChild(panel);
+
+    const timeframeFilter = document.getElementById(`${id}-timeframe-filter`);
+    const costFilter = document.getElementById(`${id}-cost-filter`);
+    const applyFilters = () => filterPanel(id, timeframeFilter.value, costFilter.value);
+    timeframeFilter.addEventListener('change', applyFilters);
+    costFilter.addEventListener('change', applyFilters);
+  });
+}
+
+function filterPanel(id, timeframeValue, costValue) {
+  const panel = document.getElementById(id);
+  panel.querySelectorAll('tbody tr').forEach(tr => {
+    const matchesTimeframe = !timeframeValue || tr.dataset.timeframe === timeframeValue;
+    const matchesCost = !costValue || tr.dataset.cost === costValue;
+    tr.style.display = (matchesTimeframe && matchesCost) ? '' : 'none';
+  });
+}
+
+function showPanel(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.target === id);
+  });
+  document.querySelectorAll('.table-panel').forEach(p => {
+    p.classList.toggle('active', p.id === id);
+  });
+}
+
+renderTabsAndTables();
+</script>
+
+</body>
+</html>

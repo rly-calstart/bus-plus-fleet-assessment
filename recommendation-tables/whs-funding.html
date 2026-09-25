@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WHS Clean Mobility Blueprint — Funding Opportunities</title>
+<style>
+  :root {
+    --ink: #1f2a24;
+    --muted: #5b6b63;
+    --border: #dde3df;
+    --accent: #2f6f4f;
+    --bg-alt: #f6f8f6;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: var(--ink);
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+  }
+  h1 { font-size: 1.25rem; margin: 0 0 16px 0; }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .tab-btn {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .tab-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+  .table-panel {
+    display: none;
+    flex: 1 1 auto;
+    min-height: 0;
+    flex-direction: column;
+  }
+  .table-panel.active { display: flex; }
+  .table-wrap {
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    flex: 1 1 auto;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--bg-alt);
+    position: sticky;
+    top: 0;
+  }
+  td:nth-child(2), td:nth-child(3), td:nth-child(5) { min-width: 280px; }
+  td:nth-child(6), th:nth-child(6) { padding-right: calc(12px + 3ch); }
+  tbody tr:nth-child(even) { background: #fbfcfb; }
+  tbody tr:hover { background: #eef4f0; }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .filters label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filters select {
+    font-size: 0.85rem;
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<h1>WHS Clean Mobility Blueprint — Funding Opportunities</h1>
+
+<div class="tabs" id="tabs"></div>
+<div id="panels"></div>
+
+<script>
+const DATA = {"tables": [{"headers": ["Source", "Funding Program", "Specific Blueprint Actions That Align", "Likely Lead / Applicant", "Funding / Status", "Fit"], "rows": [["Federal / State \u2013 ODOT", {"text": "Innovative Mobility Program (IMP) \u00a0Program webpage\u00a0", "url": "https://www.oregon.gov/odot/RPTD/Pages/Innovative-Mobility-Program.aspx"}, "E-Bike Lending Library Pilot; School-Based EV Carshare Pilot; PeaceHealth Rides Bikeshare Partnership / WHS Hub Pilot; After-School Transportation Pilot; Walk, Bike and Micromobility Program; mobility hub/shared-mobility equipment", "Bethel School District; City of Eugene; LTD; nonprofit/shared-mobility partner depending on project", "Final call for projects launches September 2026. Approximately $5 million is anticipated for capital/equipment projects supporting shared mobility. Requires 10.27% local match.", "Very High"], ["State \u2013 ODOT", {"text": "Safe Routes to School Competitive Construction Grants \u00a0Program webpage\u00a0", "url": "https://www.oregon.gov/ODOT/Programs/Pages/SRTS.aspx"}, "Echo Hollow Walking and Biking Improvements; pedestrian crossings; sidewalk improvements; bicycle facilities; public-right-of-way safety improvements near WHS", "City of Eugene, in partnership with Bethel School District / WHS", "No 2026 construction solicitation. ODOT plans to open the next construction funding opportunity in early 2027, with awards expected in 2028. Projects located solely on school grounds are not eligible", "Very High"], ["Federal / State \u2013 ODOT", {"text": "Safe Routes to School Education and Technical Assistance \u00a0Program webpage\u00a0", "url": "https://www.oregon.gov/ODOT/Programs/Pages/SRTS.aspx"}, "Walk, Bike and Micromobility Program; Student Mobility Ambassadors; active transportation education; route-awareness activities; Mobility Information Campaign", "Bethel School District / WHS; Eugene-Springfield SRTS", "Federal funding for SRTS education and technical assistance continues in 2026 despite the construction-funding delay", "High"], ["State \u2013 ODOT / LTD", {"text": "Statewide Transportation Improvement Fund (STIF) Formula Fund \u00a0Program webpage\u00a0", "url": "https://www.oregon.gov/ODOT/RPTD/Pages/Funding-Opportunities.aspx"}, "Transit and After-School Mobility Plan; After-School Transportation Pilot; transit access improvements; Free LTD Student Pass outreach; mobility management", "Lane Transit District, with Bethel/WHS as project partner or subrecipient", "Applications are currently open. Optional initial application deadline is October 29, 2026; final STIF Plan deadline is January 14, 2027. STIF supports improving, maintaining, and expanding public transportation.", "Very High"], ["Federal / State \u2013 ODOT", {"text": "Community Charging Rebates Program \u00a0Program webpage\u00a0", "url": "https://www.oregon.gov/odot/climate/Pages/communitychargingrebates.aspx"}, "Personal EV Charging ; School-Based EV Carshare Pilot charging; potentially shared/publicly accessible workplace charging", "Bethel School District / WHS", "Round 5 is expected to launch Fall 2026 with approximately $5 million in federal funding. Current program structure provides up to $8,000 per Level 2 port or 80% of eligible costs, whichever is lower", "High"], ["State \u2013 Oregon DEQ", {"text": "Oregon Clean Vehicle Rebate Program \u2013 Standard Rebate \u00a0Program webpage\u00a0", "url": "https://www.oregon.gov/deq/aq/programs/Pages/ZEV-Rebate.aspx"}, "White-Fleet Electrification; School-Based EV Carshare Pilot where an eligible entity purchases or leases the vehicle", "Bethel School District; potentially eligible nonprofit/carshare partner", "Open August 25\u2013November 4, 2026, subject to available funding. The Standard Rebate provides $2,000 for an eligible new battery-electric vehicle for qualifying Oregon residents, businesses, nonprofits, and government agencie", "High"], ["Local Utility \u2013 EWEB", {"text": "Electric Mobility Community Grant \u00a0Program webpage\u00a0", "url": "https://www.eweb.org/electric-mobility-grants"}, "E-Bike Lending Library Pilot; School-Based EV Carshare Pilot; e-bike/scooter charging; White-Fleet Electrification; EV charging; electric-mobility education", "Bethel School District / WHS; potentially nonprofit/community partner", "2026 round is closed. Prior round offered awards of up to approximately $30,000. Monitor for the next EWEB funding cycle.", "Very High"], ["Federal \u2013 U.S. EPA", {"text": "Clean School Bus Program \u00a0Program webpage\u00a0", "url": "https://www.epa.gov/cleanschoolbus"}, "School Bus Electrification; Fleet Charging Infrastructure; Fleet Electrification and Charging Readiness Plan", "Bethel School District and/or First Student, depending on vehicle ownership and program eligibility", "EPA has indicated a new Clean School Bus grant opportunity is expected later in 2026. Vehicle ownership and charging responsibilities between Bethel and First Student should be clarified before applying.", "Very High"], ["State \u2013 Oregon DEQ", {"text": "ZERO Fleet Rebate Program \u00a0Program webpage\u00a0", "url": "https://www.oregon.gov/deq/aq/programs/Pages/Zero-Fleet.aspx"}, "School Bus Electrification; eligible medium- and heavy-duty white-fleet vehicles", "Bethel School District and/or First Student", "Rebates range from $2,500\u2013$120,000 per vehicle, depending on vehicle class. As of August 19, 2026, DEQ reported that nearly all of the program's $17 million had already been committed and expected the program to reach its limit quickly", "High, but Low near-term availability"]], "title": "Federal, State, and Utility"}, {"headers": ["Source", "Funding Program", "Specific Blueprint Actions That Align", "Likely Lead / Applicant", "Funding / Status", "Fit"], "rows": [["Local Foundation", {"text": "Bethel Education Foundation \u2013 School Funding / Grants \u00a0Program webpage\u00a0", "url": "https://betheleducationfoundation.org/apply-for-funding/"}, "Bike Lab / Repair Program; Student Mobility Ambassadors; Walk, Bike and Micromobility Program; Active-Commuter Storage and Gear; Mobility Information Campaign; small pilot costs", "WHS staff / Bethel School District through Bethel Education Foundation", "Bethel Education Foundation exists specifically to support Bethel schools and can receive and administer private gifts and grants on behalf of the district.", "Very High"], ["Corporate / Credit Union", {"text": "SELCO Creative Educator Grants \u00a0Program webpage\u00a0", "url": "https://www.selco.org/steps-up/creative-educator-grants/"}, "Bike Lab / Repair Program; Student Mobility Ambassadors; transportation education; active transportation equipment; safety programming", "WHS educator", "Up to $2,500 per Creative Educator Grant. The 2026 application window is open August 15\u2013September 30, 2026.", "High"], ["Corporate / Credit Union", {"text": "SELCO Classroom Makeover \u00a0Program webpage\u00a0", "url": "https://www.selco.org/steps-up/student-and-educator-support/classroom-makeovers/"}, "Bike Lab / Repair Program; a dedicated mobility education/repair space; potentially active transportation storage or learning-space improvements", "WHS educator", "Up to $15,000. Applications are open through September 30, 2026. SELCO explicitly allows applicants to think beyond a conventional classroom when proposing learning-space improvements.", "High"], ["Corporate / Credit Union", {"text": "OnPoint Support for Schools \u00a0Program webpage\u00a0", "url": "https://www.onpointcu.com/apply-for-funding/"}, "Bike Lab supplies; Student Mobility Ambassadors; Walk/Bike programming; active-commuter equipment; Mobility Information Campaign", "WHS / Bethel School District", "Up to $2,500 per eligible school per calendar year. Applications are accepted year-round", "High"], ["Local Corporate Foundation", {"text": "OCCU Foundation Grants \u00a0Program webpage\u00a0", "url": "https://myoccu.org/about-occu/community/occu-foundation"}, "Equitable Transportation Access; After-School Transportation Pilot; Walk, Bike and Micromobility Program; active-commuter equipment; community-serving mobility projects", "Bethel Education Foundation or another eligible nonprofit partner", "Applications are currently paused and will reopen September 15, 2026. OCCU Foundation prioritizes physical health, financial health, and basic/emerging needs", "High"], ["Local Foundation", {"text": "Lane Education Foundation \u2013 Education Enhancement Grants \u00a0Program webpage\u00a0", "url": "https://laneeducationfoundation.org/grants.html"}, "Bike Lab / Repair Program; Student Mobility Ambassadors; active transportation education; mobility-related student projects", "WHS educator / Bethel School District", "Requests accepted throughout the year. Individual awards generally range from $250\u2013$1,500.", "Moderate"], ["Health System / Community Partner", {"text": "PeaceHealth Community Investment / Partnership \u00a0Program webpage\u00a0", "url": "https://www.peacehealth.org/impact/lane/community-commitment"}, "PeaceHealth Rides Bikeshare Partnership / WHS Hub Pilot; After-School Transportation Pilot; active transportation; equitable transportation access", "Bethel School District / WHS with PeaceHealth and bikeshare partners", "No standard school-mobility solicitation identified, but PeaceHealth's Lane County priorities explicitly include reliable transportation, youth, after-school support, health equity, and community well-being. PeaceHealth has also provided substantial grants to Lane County community partners", "Very High"], ["Health Foundation", {"text": "PacificSource Foundation for Health Improvement \u00a0Program webpage\u00a0", "url": "https://pacificsource.com/community/foundation"}, "Equitable Transportation Access; After-School Transportation Pilot; active mobility; transportation access tied to health and well-being", "Bethel Education Foundation or another eligible 501(c)(3) partner", "Awards typically range from $10,000\u2013$50,000. Applicants generally must be tax-exempt organizations. Construction and brick-and-mortar costs are excluded, making this better suited to programs than infrastructure.", "High"], ["Oregon Foundation", {"text": "Oregon Community Foundation \u2013 Community Grants \u00a0Program webpage \u00a0", "url": "https://oregoncf.org/grants-and-scholarships/grants/community-grant-program"}, "Equitable Transportation Access; After-School Transportation Pilot; community-serving shared mobility; district-wide active transportation programming", "Bethel Education Foundation or community nonprofit partner", "Community Grants can support program development, expansion, modest capital projects, and nonprofit capacity. More competitive as a broader community-serving initiative than as a WHS-only transportation project.", "Moderate"], ["Corporate / Community Sponsorship", {"text": "SELCO Community Sponsorships \u00a0Program webpage\u00a0", "url": "https://www.selco.org/steps-up/sponsorships/"}, "Mobility events; Walk/Bike days; student outreach; Bike Lab activities; transportation education campaigns", "Bethel Education Foundation or community nonprofit partner", "Requests are accepted from eligible 501(c)(3) organizations in SELCO's service area. SELCO prioritizes initiatives that remove barriers to learning and support youth", "Moderate"], ["Local Corporate Foundation", {"text": "OCCU Corporate Sponsorship / Community Giving \u00a0Program webpage\u00a0", "url": "https://myoccu.org/about-occu/community"}, "Student Mobility Ambassadors; active transportation events; Mobility Information Campaign; youth-centered mobility programs", "Bethel Education Foundation or community nonprofit partner", "OCCU gives priority to initiatives serving youth, education, financial literacy, and community well-being. Sponsorships are better suited to discrete programs or events than major transportation infrastructure.", "Moderate"], ["Bicycle / Mobility Industry", {"text": "PeopleForBikes Community Grant Program \u00a0Program webpage\u00a0", "url": "https://www.peopleforbikes.org/grants"}, "Covered Bike and Scooter Parking; PeaceHealth Rides Bikeshare Hub; Bike Lab / Repair Program; bicycle infrastructure", "City of Eugene or eligible nonprofit partner", "Historically supports bicycle infrastructure and community projects. Current funding is more limited/invitation-based, so it is better treated as a relationship-building opportunity than a dependable near-term source.", "Moderate"]], "title": "Philanthropic"}]};
+
+function slug(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function uniqueSorted(values) {
+  return Array.from(new Set(values.filter(v => v !== null && v !== undefined && v !== '')))
+    .sort((a, b) => String(a).localeCompare(String(b)));
+}
+
+function formatCell(v) {
+  if (v === null || v === undefined) return '';
+  if (typeof v === 'object' && v.url) {
+    const label = v.text === null || v.text === undefined ? v.url : v.text;
+    return `<a href="${v.url}" target="_blank" rel="noopener">${label}</a>`;
+  }
+  return v;
+}
+
+function renderTabsAndTables() {
+  const tabsEl = document.getElementById('tabs');
+  const panelsEl = document.getElementById('panels');
+
+  DATA.tables.forEach((table, i) => {
+    const id = slug(table.title);
+
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = table.title;
+    btn.dataset.target = id;
+    btn.addEventListener('click', () => showPanel(id));
+    tabsEl.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'table-panel' + (i === 0 ? ' active' : '');
+    panel.id = id;
+
+    const sources = uniqueSorted(table.rows.map(r => r[0]));
+    const fits = uniqueSorted(table.rows.map(r => r[5]));
+
+    let html = '<div class="filters">';
+    html += `<label>Source: <select id="${id}-source-filter"><option value="">All</option>` +
+      sources.map(s => `<option value="${s}">${s}</option>`).join('') + '</select></label>';
+    html += `<label>Fit: <select id="${id}-fit-filter"><option value="">All</option>` +
+      fits.map(f => `<option value="${f}">${f}</option>`).join('') + '</select></label>';
+    html += '</div>';
+
+    html += '<div class="table-wrap"><table><thead><tr>';
+    table.headers.forEach(h => html += `<th>${h}</th>`);
+    html += '</tr></thead><tbody>';
+    table.rows.forEach(row => {
+      const source = row[0] ?? '';
+      const fit = row[5] ?? '';
+      html += `<tr data-source="${source}" data-fit="${fit}">` +
+        row.map(v => `<td>${formatCell(v)}</td>`).join('') + '</tr>';
+    });
+    html += '</tbody></table></div>';
+    panel.innerHTML = html;
+    panelsEl.appendChild(panel);
+
+    const sourceFilter = document.getElementById(`${id}-source-filter`);
+    const fitFilter = document.getElementById(`${id}-fit-filter`);
+    const applyFilters = () => filterPanel(id, sourceFilter.value, fitFilter.value);
+    sourceFilter.addEventListener('change', applyFilters);
+    fitFilter.addEventListener('change', applyFilters);
+  });
+}
+
+function filterPanel(id, sourceValue, fitValue) {
+  const panel = document.getElementById(id);
+  panel.querySelectorAll('tbody tr').forEach(tr => {
+    const matchesSource = !sourceValue || tr.dataset.source === sourceValue;
+    const matchesFit = !fitValue || tr.dataset.fit === fitValue;
+    tr.style.display = (matchesSource && matchesFit) ? '' : 'none';
+  });
+}
+
+function showPanel(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.target === id);
+  });
+  document.querySelectorAll('.table-panel').forEach(p => {
+    p.classList.toggle('active', p.id === id);
+  });
+}
+
+renderTabsAndTables();
+</script>
+
+</body>
+</html>
