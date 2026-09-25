@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONHS Clean Mobility Blueprint — Recommendations</title>
+<style>
+  :root {
+    --ink: #1f2a24;
+    --muted: #5b6b63;
+    --border: #dde3df;
+    --accent: #2f6f4f;
+    --bg-alt: #f6f8f6;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: var(--ink);
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+  }
+  h1 { font-size: 1.25rem; margin: 0 0 16px 0; }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .tab-btn {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .tab-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+  .table-panel {
+    display: none;
+    flex: 1 1 auto;
+    min-height: 0;
+    flex-direction: column;
+  }
+  .table-panel.active { display: flex; }
+  .table-wrap {
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    flex: 1 1 auto;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--bg-alt);
+    position: sticky;
+    top: 0;
+  }
+  td:nth-child(5), th:nth-child(5) { padding-right: calc(12px + 3ch); }
+  td:nth-child(6) { min-width: 320px; }
+  tbody tr:nth-child(even) { background: #fbfcfb; }
+  tbody tr:hover { background: #eef4f0; }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .filters label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filters select {
+    font-size: 0.85rem;
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<h1>ONHS Clean Mobility Blueprint — Recommendations</h1>
+
+<div class="tabs" id="tabs"></div>
+<div id="panels"></div>
+
+<script>
+const DATA = {"tables": [{"headers": ["Action", "Timeframe", "Lead", "Other Stakeholders", "Cost", "Description and Rationale"], "rows": [["School Mobility Team", "Near-term \u2192 Ongoing", "ONHS", "OPS Transportation; Facilities; Safety Services; students; parents/caregivers; faculty; City of Olathe", "$", "Establish a small team responsible for advancing the Blueprint, coordinating partners, identifying funding, monitoring implementation, and periodically reviewing transportation data. Include student representation so recommendations reflect actual student experiences."], ["Commute Survey and Mode-Share Tracking", "Near-term \u2192 Ongoing", "ONHS Mobility Team", "OPS Transportation; students; parents/caregivers; staff", "$", "Use the existing survey as a baseline and repeat a shorter commute survey periodically. Pair survey data with counts of vehicles, bus riders, pedestrians, bicycles, carpools, and parking utilization. Conduct additional staff outreach because staff were underrepresented in the existing survey."], ["School Bus Optimization Study", "Near-term", "OPS", "ONHS; DS Bus Lines; Assisted Transportation; students and families", "$", "Evaluate why school-bus use is substantially below stated interest, including routes, travel times, reliability, registration, capacity, stop locations, and the paid transportation program."], ["After-School and Flexible Mobility Assessment", "Near-term", "OPS", "Johnson County Transit / RideKC; athletics and activities staff; students and families", "$", "Identify transportation gaps associated with athletics, clubs, employment, and other after-school activities. Schedule conflicts and time constraints were each reported by more than 40% of survey respondents, while 14.6% identified a shuttle as their ideal commute."], ["Campus Circulation and Dismissal Plan", "Near-term", "OPS / ONHS", "OPS Safety Services; School Resource Officer; City of Olathe as appropriate", "$\u2013$$", "Conduct a focused circulation analysis addressing the congested primary exit, undefined circulation in the student parking lot, vehicles occupying fire and travel lanes, passenger vehicles entering bus-restricted areas, and dispersed pedestrian movements."], ["Safe Routes to Olathe North Plan", "Near- to Medium-term", "City of Olathe / OPS", "ONHS; students and families; neighborhood residents", "$$", "Map primary walking, biking, and micromobility routes and evaluate sidewalks, crossings, bicycle infrastructure, lighting, traffic speeds, and connections to nearby trails. Coordinate this work with Olathe Safe Streets and other City transportation-safety planning."], ["Kansas Safe Routes to School Program", "Near-term \u2192 Ongoing", "OPS / ONHS", "City of Olathe; KDOT Kansas Safe Routes to School; students; families; neighborhood partners", "$\u2013$$", "Develop a formal Safe Routes to School (SRTS) program using KDOT Kansas SRTS resources and technical assistance. Register/connect with the state program, use the Kansas School Zone Design Guide and education/ encouragement materials, and pursue future KDOT Planning and Programming Grant opportunities. A completed SRTS Plan can position the district and City for additional infrastructure and program funding."], ["Transportation Access Gap Analysis", "Near-term", "OPS", "ONHS counselors and attendance staff; families; RideKC", "$", "Identify students who lack a reliable transportation option, including students who live within the school-bus eligibility boundary, participate in after-school activities, or experience transportation-related attendance challenges. Use findings to target bus, transit, carpool, or other mobility assistance."], ["EV and Charging Readiness Plan", "Near- to Medium-term", "OPS", "Evergy; ONHS; OPS fleet/transportation providers", "$", "Assess electrical capacity, potential charger locations, expected utilization, ownership models, and future fleet needs before installing charging. Survey findings suggest EV charging is a lower immediate priority, however access to transportation is shown to increase interest in EVs."], ["Mobility Funding Strategy", "Near-term \u2192 Ongoing", "OPS", "ONHS; City of Olathe; KDOT; Evergy; regional/state partners", "$", "Maintain a pipeline of grants, utility incentives, transportation funds, and other resources that could support safety improvements, Safe Routes to School, transit pilots, active transportation, and electrification."]], "title": "Planning and Capacity Building"}, {"headers": ["Action", "Timeframe", "Lead", "Other Stakeholders", "Cost", "Description and Rationale"], "rows": [["School Bus Participation and Improvement Initiative", "Near-term", "OPS", "ONHS; DS Bus Lines; Assisted Transportation; families", "$", "Make school-bus improvement a central near-term strategy. In the survey, 42.3% selected the school bus as their ideal commute versus 17.7% who currently use a yellow school bus. Improve awareness of eligibility, registration, paid service, route information, and tracking tools while addressing operational barriers."], ["After-School Shuttle / RideKC Pilot", "Medium-term", "OPS", "ONHS; Johnson County Transit / RideKC; student activities and athletics", "$$", "Pilot flexible transportation for selected after-school periods or student populations. Johnson County 499 Micro Transit currently operates 6 a.m.\u20138 p.m. daily and permits riders age 16+ to ride independently. Test school-funded or subsidized rides before considering a dedicated shuttle."], ["Mobility Information Campaign", "Near-term", "ONHS Mobility Team", "OPS communications; students; families; RideKC", "$", "Develop a concise \u201cWays to Get to Olathe North\u201d resource covering school-bus options, walking/biking routes, transit, carpooling, and other services. Nearly 15% of respondents identified more information as something that could help them shift away from driving. Emphasize cost, reliability, convenience, and safety first."], ["Carpool and Preferred Parking Program", "Near-term", "ONHS / OPS", "Students; staff; parents; OPS", "$", "Establish preferred parking or other incentives for verified student and staff carpools. Only 2.0% of current respondents reported carpooling, while 24.4% said financial incentives could help them move away from a gas-powered commute. Build on the school\u2019s existing parking-permit process."], ["RideJoCo Microtransit Pass / Trip-Credit Pilot", "Near-term", "OPS / ONHS", "Johnson County Transit/RideJoC", "$-$$", "Purchase or subsidize trips on existing Johnson County microtransit for students who need transportation outside normal school-bus schedules\u2014for example, after athletics, clubs, tutoring, employment, or CTE activities. RideJoCo Microtransit already provides shared-ride service across a broad Johnson County service area; riders 16 and older may travel independently."], ["Anti-Idling Program", "Near-term", "ONHS / OPS", "DS Bus Lines; Assisted Transportation; students and families", "$", "Pair existing no-idling signage with direct communication, bus-provider protocols, pickup-zone messaging, and periodic enforcement. This directly responds to field observations that more than half of both buses and passenger vehicles were idling during dismissal."], ["Walk, Bike and Micromobility Program", "Near- to Medium-term", "ONHS Mobility Team", "City of Olathe; Kansas SRTS; students; local bicycle organizations", "$", "Organize route-awareness events, bicycle safety education, group rides/walks, and active-transportation challenges. Align activities with Kansas SRTS education and encouragement resources, and implement them alongside safety improvements rather than encouraging riding on unresolved high-conflict routes."], ["Mobility Equipment and Incentives", "Near-term", "ONHS / OPS", "Students; PTO/community sponsors; local businesses; Kansas SRTS", "$", "Provide targeted incentives such as bicycle locks, helmets, lights, reflective gear, rain gear, or transportation credits. This responds to unsecured bicycles observed on campus and to survey findings that financial incentives were the most frequently selected actionable measure for shifting away from gas vehicles."], ["Active-Commuter Storage Program", "Near-term", "ONHS", "OPS Facilities; students", "$", "Provide secure locations for helmets, rain gear, backpacks, sports equipment, or other items used by active commuters. Carrying equipment or personal items was identified as a barrier by 37.9% of respondents."], ["Mobility Ambassadors / Student Leadership", "Near-term \u2192 Ongoing", "ONHS", "Student clubs; faculty advisors; OPS", "$", "Recruit students and staff to promote mobility options, collect data, participate in safety audits, support events, and advise on implementation. Focus outreach on the approximately half of respondents who indicated willingness to consider new options with guidance or try them immediately."], ["E-Bike Lending Library Pilot", "Near- to Medium-term", "ONHS / OPS", "Students and families; OPS Facilities and Risk Management; City of Olathe; local bicycle organizations or retailers; potential philanthropic/corporate sponsors", "$$", "Establish a small pilot fleet of e-bikes that eligible students and/or staff can borrow for school commutes for defined periods. Survey results indicate potential demand: 10.5% of respondents selected an e-bike, scooter, or other personal electric mode as their ideal commute."], ["School-Based EV Carshare Pilot", "Medium-term", "OPS / ONHS", "Carshare operator; Evergy; OPS Foundation; City of Olathe; community partners", "$$", "Host one or more shared EVs at Olathe North that eligible staff and potentially community members could reserve by the hour or day. The vehicles could provide an alternative to owning or bringing a personal vehicle to campus and could also introduce users to EVs without requiring vehicle ownership."]], "title": "Programmatic Actions"}, {"headers": ["Action", "Timeframe", "Lead", "Other Stakeholders", "Cost", "Description and Rationale"], "rows": [["Student Parking Lot Pedestrian Spine", "Medium-term", "OPS", "ONHS; Safety Services; students", "$$\u2013$$$", "Establish clearly defined pedestrian routes from school exits through the primary student parking lot. Treatments could include high-visibility markings, raised walkways, bollards/delineators, curb extensions, or physically separated pathways."], ["Student Parking Lot Circulation Improvements", "Medium-term", "OPS", "ONHS; Safety Services; traffic engineer", "$$\u2013$$$", "Re-stripe and redesign the primary student parking lot to establish clearly defined travel lanes, intersections, one-way circulation where appropriate, and more predictable exit movements. Test temporary versions first through the quick-build pilot."], ["Staff/Visitor Lot Pedestrian Connection ", "Near- to Medium-term", "OPS", "ONHS", "$$", "Complete the pedestrian connection between the staff/visitor parking area and the primary entrance where stairs currently direct pedestrians toward the school without a corresponding marked crossing. Evaluate high-visibility markings, ADA-accessible routing, signage, lighting, and speed treatments."], ["Nelson Road Crossing Improvement", "Near- to Medium-term", "City of Olathe", "OPS; ONHS; trail users", "$$$", "Evaluate a formal crossing between campus and the practice field/additional parking area and coordinate it with the Mahaffie Creek Trail connection. Potential treatments could include a high-visibility crosswalk, pedestrian refuge, lighting, warning treatments, or other speed-management measures."], ["Passenger Pickup and Bus-Zone Separation", "Medium-term", "OPS / ONHS", "OPS Transportation; DS Bus Lines; Safety Services", "$$\u2013$$$", "Create clearer physical and operational separation among school buses, student drivers, passenger pickup, and pedestrians. Treatments could include designated loading areas, lane markings, signage, curbing, or delineators that reinforce bus-area restrictions."], ["Secure and Covered Bike/Scooter Parking", "Near-term", "OPS / ONHS", "Students; City of Olathe; Kansas SRTS", "$", "Upgrade existing bike parking with racks that allow frame locking, lighting, good visibility, weather protection, and enough capacity for growth. Basic bike maintenance tools can also be included to promote riding. Secure parking was identified by survey respondents as helpful, while weather was one of the most common reported barriers."], ["Bicycle and Micromobility Connections to Campus", "Medium- to Long-term", "City of Olathe", "OPS; ONHS; Kansas SRTS; neighborhood residents; students", "$$$", "Improve connections between nearby neighborhoods, trails, and Olathe North, particularly on routes relying mainly on \u201cShare the Road\u201d signage. Consider neighborhood bikeways, traffic calming, bike lanes, buffered/protected facilities, shared-use paths, or improved intersection crossings."], ["Sidewalk and Crossing Gap Improvements", "Medium- to Long-term", "City of Olathe / OPS", "ONHS; Kansas SRTS; neighborhood residents", "$$\u2013$$$", "Identify and prioritize missing or uncomfortable sidewalks and crossings on routes most commonly used by students. Use the SRTS planning process and Olathe Safe Streets to prioritize off-campus improvements and strengthen eligibility for future implementation funding."], ["EV Charging", "Medium-term", "OPS", "Evergy; ONHS", "$$", "Following the EV readiness assessment, consider a modest first phase of Level 2 chargers rather than a large initial deployment. Evergy currently offers Kansas commercial charging rebates subject to eligibility. Once charging is available, charging relating incentives to encourage EV driving (such as discounted charging) should be explored."], ["E-Bike / Scooter Charging", "Medium-term", "OPS / ONHS", "Students; Evergy", "$\u2013$$", "Survey results suggest safe routes and secure access are more immediate priorities, however, paired with electrified charging, this could drive demand for more e-mobility."], ["School Bus Electrification and Charging", "Long-term", "OPS", "DS Bus Lines; Assisted Transportation; Evergy; OPS Facilities", "$$$", "Develop a district-level strategy for transitioning buses serving Olathe North and other OPS schools to zero-emission vehicles as replacement opportunities arise. Evaluate route duty cycles, vehicle replacement schedules, depot electrical capacity, charging strategy, and available incentives with transportation providers from the outset."], ["Quick-Build Arrival and Dismissal Pilot", "Near-term", "OPS / ONHS", "OPS Facilities; Safety Services; School Resource Officer", "$", "Test changes using cones, temporary delineators, signage, staff traffic control, and temporary markings before constructing permanent improvements. Potential tests include one-way parking circulation, designated pedestrian corridors, separated pickup areas, and stronger bus-zone controls."]], "title": "Infrastructure Actions"}]};
+
+function slug(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function uniqueSorted(values) {
+  return Array.from(new Set(values.filter(v => v !== null && v !== undefined && v !== '')))
+    .sort((a, b) => String(a).localeCompare(String(b)));
+}
+
+function renderTabsAndTables() {
+  const tabsEl = document.getElementById('tabs');
+  const panelsEl = document.getElementById('panels');
+
+  DATA.tables.forEach((table, i) => {
+    const id = slug(table.title);
+
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = table.title;
+    btn.dataset.target = id;
+    btn.addEventListener('click', () => showPanel(id));
+    tabsEl.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'table-panel' + (i === 0 ? ' active' : '');
+    panel.id = id;
+
+    const timeframes = uniqueSorted(table.rows.map(r => r[1]));
+    const costs = uniqueSorted(table.rows.map(r => r[4]));
+
+    let html = '<div class="filters">';
+    html += `<label>Timeframe: <select id="${id}-timeframe-filter"><option value="">All</option>` +
+      timeframes.map(t => `<option value="${t}">${t}</option>`).join('') + '</select></label>';
+    html += `<label>Cost: <select id="${id}-cost-filter"><option value="">All</option>` +
+      costs.map(c => `<option value="${c}">${c}</option>`).join('') + '</select></label>';
+    html += '</div>';
+
+    html += '<div class="table-wrap"><table><thead><tr>';
+    table.headers.forEach(h => html += `<th>${h}</th>`);
+    html += '</tr></thead><tbody>';
+    table.rows.forEach(row => {
+      const timeframe = row[1] ?? '';
+      const cost = row[4] ?? '';
+      html += `<tr data-timeframe="${timeframe}" data-cost="${cost}">` +
+        row.map(v => `<td>${v === null || v === undefined ? '' : v}</td>`).join('') + '</tr>';
+    });
+    html += '</tbody></table></div>';
+    panel.innerHTML = html;
+    panelsEl.appendChild(panel);
+
+    const timeframeFilter = document.getElementById(`${id}-timeframe-filter`);
+    const costFilter = document.getElementById(`${id}-cost-filter`);
+    const applyFilters = () => filterPanel(id, timeframeFilter.value, costFilter.value);
+    timeframeFilter.addEventListener('change', applyFilters);
+    costFilter.addEventListener('change', applyFilters);
+  });
+}
+
+function filterPanel(id, timeframeValue, costValue) {
+  const panel = document.getElementById(id);
+  panel.querySelectorAll('tbody tr').forEach(tr => {
+    const matchesTimeframe = !timeframeValue || tr.dataset.timeframe === timeframeValue;
+    const matchesCost = !costValue || tr.dataset.cost === costValue;
+    tr.style.display = (matchesTimeframe && matchesCost) ? '' : 'none';
+  });
+}
+
+function showPanel(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.target === id);
+  });
+  document.querySelectorAll('.table-panel').forEach(p => {
+    p.classList.toggle('active', p.id === id);
+  });
+}
+
+renderTabsAndTables();
+</script>
+
+</body>
+</html>

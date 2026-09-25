@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONHS Clean Mobility Blueprint — Funding Opportunities</title>
+<style>
+  :root {
+    --ink: #1f2a24;
+    --muted: #5b6b63;
+    --border: #dde3df;
+    --accent: #2f6f4f;
+    --bg-alt: #f6f8f6;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: var(--ink);
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+  }
+  h1 { font-size: 1.25rem; margin: 0 0 16px 0; }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+  }
+  .tab-btn {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .tab-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff;
+  }
+  .table-panel {
+    display: none;
+    flex: 1 1 auto;
+    min-height: 0;
+    flex-direction: column;
+  }
+  .table-panel.active { display: flex; }
+  .table-wrap {
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    flex: 1 1 auto;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--bg-alt);
+    position: sticky;
+    top: 0;
+  }
+  td:nth-child(2), td:nth-child(3), td:nth-child(5) { min-width: 280px; }
+  td:nth-child(6), th:nth-child(6) { padding-right: calc(12px + 3ch); }
+  tbody tr:nth-child(even) { background: #fbfcfb; }
+  tbody tr:hover { background: #eef4f0; }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .filters label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .filters select {
+    font-size: 0.85rem;
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<h1>ONHS Clean Mobility Blueprint — Funding Opportunities</h1>
+
+<div class="tabs" id="tabs"></div>
+<div id="panels"></div>
+
+<script>
+const DATA = {"tables": [{"headers": ["Source", "Funding Program", "Specific Blueprint Actions That Align", "Likely Lead / Applicant", "Funding / Status", "Fit"], "rows": [["Local Foundation", "Olathe Public Schools Foundation \u2013 Women\u2019s Giving Circle \u00a0Program webpage\u00a0", "Mobility Equipment and Incentives; Active-Commuter Storage; Mobility Ambassadors; Transportation Support and Attendance Referral; Mobility Information Campaign; Walk/Bike/Micromobility Program; small Quick-Build Pilot", "ONHS educator / ONHS", "8,000\u2013$15,000; Fall 2026 applications due September 17, 2026.", "High"], ["Kansas Foundation", "Kansas Health Foundation \u2013 Upward Mobility Mass Action Mini-Grant \u00a0Program webpage\u00a0", "Transportation Access Gap Analysis; After-School Shuttle/RideKC Pilot; Transportation Support and Attendance Referral; School Bus Improvement Initiative; Mobility Ambassadors; Mobility Equipment/Incentives", "OPSF or other eligible nonprofit/community partner with OPS", "Up to $10,000; current 2026 round due September 29, 2026.", "Very High"], ["KC Regional Foundation", "Hall Family Foundation \u00a0Program webpage\u00a0", "Transportation Access Gap Analysis; After-School Shuttle Pilot; School Bus Optimization; Transportation Support and Attendance Referral; Mobility Team; student/family mobility programming", "OPSF/OPS partnership or regional nonprofit coalition", "No standard published cap; grants vary and multi-year support is possible. Rolling/year-round.", "Very High"], ["KC Regional Foundation", "Ewing Marion Kauffman Foundation \u2013 Project Grants \u00a0Program webpage\u00a0", "After-School Shuttle/RideKC Pilot; Transportation Access Gap Analysis; Transportation Support and Attendance Referral; Commute Tracking/Evaluation", "OPS/OPSF plus workforce, transit and nonprofit partners", "$250,000+ per year, multiyear. Next window opens November 2026 and closes January 2027", "High"], ["National Foundation", "Arnold Ventures \u2013 Building Evidence / Strengthening Evidence \u00a0Program webpage\u00a0", "Commute Survey and Mode-Share Tracking; Transportation Access Gap Analysis; After-School Shuttle Pilot; Transportation Support/Attendance Referral; School Bus Improvement Initiative", "OPS + university/research partner", "No standard implementation cap; research budgets depend on scope. Current LOIs due September 11, 2026.", "High"], ["Corporate Giving", "Walmart Spark Good Local Grants \u00a0Program webpage\u00a0", "Mobility Equipment and Incentives; Active-Commuter Storage; Walk/Bike Program; Mobility Information Campaign; Mobility Ambassadors; Quick-Build Pilot materials", "ONHS directly, subject to eligibility verification", "$250\u2013$5,000; current cycle runs August 1\u2013November 30, 2026.", "High"], ["Active Transportation Foundation", "Outride Community Impact Grant \u00a0Program webpage\u00a0", "Walk/Bike/Micromobility Program; Mobility Equipment and Incentives; Mobility Ambassadors; bicycle education; Secure Bike/Scooter Parking when tied to programming", "OPS/ONHS or nonprofit partner", "Typically $5,000\u2013$15,000. 2026 cycle closed April 30; future cycle TBD.", "Very High"], ["Corporate / Health", "Blue Cross and Blue Shield of Kansas City \u2013 Charitable Funding \u00a0Program webpage\u00a0", "Walk/Bike/Micromobility Program; Mobility Equipment and Incentives; Active-Commuter Storage; Mobility Ambassadors; Safe Routes education; transportation-access programming", "OPSF or another 501(c)(3)", "No published cap; applications accepted. Capital campaigns excluded.", "Very High"], ["Local Corporate", "Garmin Sponsorship / Community Support \u00a0Program webpage\u00a0", "Commute Survey and Mode-Share Tracking; Walk/Bike/Micromobility Program; Mobility Ambassadors; Mobility Equipment; Safe Routes activities", "ONHS/OPSF; potentially City or BikeWalkKC partnership", "No published maximum; no fixed deadline stated.", "High"], ["Local Foundation", "OPSF DonorsChoose Matching Program \u00a0Program webpage\u00a0", "Mobility Equipment and Incentives; Active-Commuter Storage; Transportation Curriculum; Mobility Ambassadors", "ONHS educator", "OPSF match up to $1,000 per educator per school year in 2026\u201327.", "High"], ["Kansas Foundation", "Kansas Health Foundation \u2013 Transformation Funding \u00a0Program webpage\u00a0", "District-wide Transportation Access Program; After-School Mobility; Attendance Support; Mobility Team/capacity; scaled shuttle/transit programs", "ONHS educator", "Latest round offered up to $100,000; current round closed; 2026 Transformation round closed; future round TBD. Prior round offered $100,000\u2013$500,000.next round TBD.", "High"], ["National / City Partnership", "Bloomberg Philanthropies \u2013 Asphalt Art Initiative \u00a0Program webpage\u00a0", "Quick-Build Arrival and Dismissal Pilot; pedestrian crossing enhancements; school-zone traffic calming; Safe Routes demonstrations", "OPSF/nonprofit coalition + OPS and regional partners", "Latest round offered up to $100,000; current round closed; next round TBD.", "High"]], "title": "Philanthropic"}, {"headers": ["Source", "Funding Program", "Specific Blueprint Actions That Align", "Likely Lead / Applicant", "Funding / Status", "Fit"], "rows": [["State", "KDOT Safe Routes to School Planning Grant \u00a0Program webpage\u00a0", "Safe Routes to School Program; Safe Routes to Olathe North Plan; School Mobility Team; Commute Survey and Mode-Share Tracking; Campus Circulation and Dismissal Plan", "OPS or City of Olathe, jointly supported by the other", "No local match for planning. 2026\u201327 applications closed May 1, 2026; next round TBD", "Very High"], ["Federal (MARC)", "Transportation Alternatives Program / STBG Set-Aside \u00a0Program webpage\u00a0", "Nelson Road Crossing Improvement; Staff/Visitor Lot Pedestrian Connection; Bicycle and Micromobility Connections; Sidewalk and Crossing Gap Improvements; Student Parking Lot Pedestrian Spine; Safe Routes infrastructure", "City of Olathe, with OPS as project partner", "Typically federal-aid capital funding with local match. Current 2029\u201330 application cycle closed July 2026; next solicitation TBD.", "Very High"], ["State", "KDOT Cost Share Program \u00a0Program webpage\u00a0", "Nelson Road Crossing; Sidewalk/Crossing Gaps; Bicycle Connections; Passenger Pickup and Bus-Zone Separation; Student Parking Lot Circulation; Student Parking Lot Pedestrian Spine", "City of Olathe or OPS, depending on ownership/jurisdiction", "Minimum 15% local cash match. Fall 2026 round open through September 24, 2026.", "Very High \u2013 Immediate"], ["Federal (MARC)", "Carbon Reduction Program (CRP) \u00a0Program webpage\u00a0", "After-School Shuttle/RideKC Pilot; Carpool/Preferred Parking; Walk/Bike/Micromobility Program; Bicycle Connections; Sidewalk Improvements; Phase 1 EV Charging; Anti-Idling; School Bus Electrification", "City of Olathe / Johnson County Transit / eligible public sponsor, with OPS", "Minimum 20% match. 2029\u201330 solicitation closed July 2026; next solicitation TBD.", "High"], ["Federal (MARC)", "Congestion Mitigation and Air Quality (CMAQ) \u00a0Program webpage\u00a0", "After-School Shuttle/RideKC Pilot; Anti-Idling; Carpool/Preferred Parking; Mobility Information Campaign; Walk/Bike Program; EV Charging; school bus/transit improvements", "City of Olathe / Johnson County Transit / eligible public sponsor, with OPS", "Federal-aid funding with local match. Current 2029\u201330 cycle closed July 2026; next solicitation TBD.", "High"], ["State", "KDOT Innovative Technology Program \u00a0Program webpage\u00a0", "After-School Shuttle/RideKC Pilot; Quick-Build Arrival and Dismissal Pilot; Mode-Share Tracking; Campus Circulation technology; real-time mobility tools", "Eligible Kansas public entity, potentially with OPS and a technology partner", "Up to $1M/project; minimum 25% non-state cash match. Project Concept Form precedes application.", "Medium\u2013High"], ["Federal", "EPA Clean School Bus Program \u00a0Program webpage\u00a0", "School Bus Electrification and Charging; EV and Charging Readiness Plan", "OPS and/or contracted school-bus provider", "2026 funding opportunity expected later in 2026; amount and deadline TBD.", "Very High"], ["Utility \u2013 Evergy", "Commercial EV Charging Rebates \u00a0Program webpage\u00a0", "EV and Charging Readiness Plan; Phase 1 EV Charging; School Bus/Fleet Charging", "OPS / charger site owner", "Up to $25,000/site employee charging; $55,000/site Kansas public charging; $65,000/site fleet charging. Preapproval required.", "Very High"], ["Federal / City of Olathe", "Safe Streets and Roads for All (SS4A) \u00a0Program webpage\u00a0", "Nelson Road Crossing; Bicycle Connections; Sidewalk/Crossing Gaps; campus-adjacent safety improvements; Safe Routes planning; Quick-Build Demonstrations", "City of Olathe, with OPS advocating for ONHS projects", "FY2026 competition closed May 26, 2026. Future availability depends on federal reauthorization/appropriations.", "High"]], "title": "Federal, State, and Utility"}]};
+
+function slug(s) {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+function uniqueSorted(values) {
+  return Array.from(new Set(values.filter(v => v !== null && v !== undefined && v !== '')))
+    .sort((a, b) => String(a).localeCompare(String(b)));
+}
+
+function renderTabsAndTables() {
+  const tabsEl = document.getElementById('tabs');
+  const panelsEl = document.getElementById('panels');
+
+  DATA.tables.forEach((table, i) => {
+    const id = slug(table.title);
+
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = table.title;
+    btn.dataset.target = id;
+    btn.addEventListener('click', () => showPanel(id));
+    tabsEl.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'table-panel' + (i === 0 ? ' active' : '');
+    panel.id = id;
+
+    const sources = uniqueSorted(table.rows.map(r => r[0]));
+    const fits = uniqueSorted(table.rows.map(r => r[5]));
+
+    let html = '<div class="filters">';
+    html += `<label>Source: <select id="${id}-source-filter"><option value="">All</option>` +
+      sources.map(s => `<option value="${s}">${s}</option>`).join('') + '</select></label>';
+    html += `<label>Fit: <select id="${id}-fit-filter"><option value="">All</option>` +
+      fits.map(f => `<option value="${f}">${f}</option>`).join('') + '</select></label>';
+    html += '</div>';
+
+    html += '<div class="table-wrap"><table><thead><tr>';
+    table.headers.forEach(h => html += `<th>${h}</th>`);
+    html += '</tr></thead><tbody>';
+    table.rows.forEach(row => {
+      const source = row[0] ?? '';
+      const fit = row[5] ?? '';
+      html += `<tr data-source="${source}" data-fit="${fit}">` +
+        row.map(v => `<td>${v === null || v === undefined ? '' : v}</td>`).join('') + '</tr>';
+    });
+    html += '</tbody></table></div>';
+    panel.innerHTML = html;
+    panelsEl.appendChild(panel);
+
+    const sourceFilter = document.getElementById(`${id}-source-filter`);
+    const fitFilter = document.getElementById(`${id}-fit-filter`);
+    const applyFilters = () => filterPanel(id, sourceFilter.value, fitFilter.value);
+    sourceFilter.addEventListener('change', applyFilters);
+    fitFilter.addEventListener('change', applyFilters);
+  });
+}
+
+function filterPanel(id, sourceValue, fitValue) {
+  const panel = document.getElementById(id);
+  panel.querySelectorAll('tbody tr').forEach(tr => {
+    const matchesSource = !sourceValue || tr.dataset.source === sourceValue;
+    const matchesFit = !fitValue || tr.dataset.fit === fitValue;
+    tr.style.display = (matchesSource && matchesFit) ? '' : 'none';
+  });
+}
+
+function showPanel(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.target === id);
+  });
+  document.querySelectorAll('.table-panel').forEach(p => {
+    p.classList.toggle('active', p.id === id);
+  });
+}
+
+renderTabsAndTables();
+</script>
+
+</body>
+</html>
